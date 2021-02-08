@@ -3,9 +3,9 @@ import styles from './Profile.module.css'
 import ProfileInfo from './ProfileInfo/ProfileInfo';
 import MyPosts from './MyPosts/MyPosts';
 
-function Profile(props:any) {
+function Profile() {
     return (
-        <div className={styles.content}>
+        <div>
            <ProfileInfo />
           <MyPosts />
         </div>
