@@ -8,6 +8,10 @@ import Post from './Post/Post';
 }*/
 
 function MyPosts() {
+    let postsData = [
+        {id: 1, post: "Hi! It's my first post", likesCount: 3},
+        {id: 2, post: "Yo!", likesCount: 12}
+    ];
     return (
             <div>
                 <h3> My posts</h3>
@@ -18,11 +22,15 @@ function MyPosts() {
                     <button>Add post</button>
                 </div>
                 <div className={styles.posts} >
-                    <Post message={"Hi! It's my first post"} likesCount={3}/>
-                    <Post message={"Yo!"} likesCount={12}/>
-
+                    {
+                        postsData.map(
+                            el =>   <Post
+                                message={el.post}
+                                likesCount={el.likesCount}
+                            />
+                        )
+                    }
                 </div>
-
             </div>
 
     )
