@@ -9,16 +9,16 @@ import {StatePropsType} from './redux/state';
 
 type AppPropsType ={
     state: StatePropsType
+    addPost: (postMessage: string) => void
 }
 
 function App(props: AppPropsType) {
     return (
-        <BrowserRouter>
             <div className="app-wrapper">
                 <Header/>
                 <Navbar/>
                 <div className="app-wrapper-content">
-                    <Route exact path ={'/profile'} render={() => <Profile profilePage={props.state.profilePage} />}/>
+                    <Route exact path ={'/profile'} render={() => <Profile profilePage={props.state.profilePage} addPost={props.addPost} />}/>
                     <Route exact path ={'/dialogs'} render={() => <Dialogs messagesPage={props.state.messagesPage}/>}
                     />
                    {/* <Route path ={'/news'} component={News}/>
@@ -26,7 +26,6 @@ function App(props: AppPropsType) {
                     <Route path ={'/settings'} component={Settings}/>*/}
                 </div>
             </div>
-        </BrowserRouter>
     );
 }
 

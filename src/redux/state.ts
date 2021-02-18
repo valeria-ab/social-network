@@ -1,3 +1,5 @@
+import {rerenderEntireTree} from '../render';
+
 export type PostPropsType ={
     id: number
     postMessage: string
@@ -41,8 +43,17 @@ let state:StatePropsType = {
             {id: 1, message: "Дай в долг!"},
             {id: 2, message: "Я набухалась"},
             {id: 3, message: "Плету ковёр..."},
-            {id: 4, message: "Готовлю хрючево.."}
+            {id: 4, message: "Люблю хрючево.."}
         ]}
 }
 
+export function addPost(postMessage: string) {
+    let newPost: PostPropsType = {
+        id: 3,
+        postMessage: postMessage,
+        likesCount: 0
+    }
+    state.profilePage.postsData.push(newPost)
+    rerenderEntireTree(state)
+}
 export default state;
