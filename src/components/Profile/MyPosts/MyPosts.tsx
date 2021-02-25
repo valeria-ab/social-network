@@ -6,7 +6,9 @@ import {PostPropsType} from './../../../redux/state';
 
 type MypostsPropsType = {
     postsData: Array<PostPropsType>
-    addPost: (postMessage: string) => void
+    addPost: () => void
+    newPostText: string
+    updateNewPostText: (newPostText: string) => void
 }
 
 function MyPosts(props: MypostsPropsType ) {
@@ -15,18 +17,26 @@ function MyPosts(props: MypostsPropsType ) {
     let addPost = () => {
         //пишем такую странную дичь потому что тайпСкрипт переживает что в результате этого
         // newPostElement.current.value может придти не тип "строка" а undefined
-        if(newPostElement.current) {
-            props.addPost(newPostElement.current.value)
-            newPostElement.current.value = ''
+        props.addPost()
         }
 
+
+    let onPostChange = () => {
+        if(newPostElement.current) {
+            props.updateNewPostText(newPostElement.current.value)
+
+        }
     }
 
     return (
-            <div>
+        <div>
                 <h3> My posts</h3>
                 <div>
-                    <textarea ref={newPostElement}></textarea>
+                    <textarea
+                        ref={newPostElement}
+                        value={props.newPostText}
+                        onChange={onPostChange}
+                    ></textarea>
                 </div>
                 <div>
                     <button onClick={addPost}>Add post</button>
