@@ -1,29 +1,26 @@
 import React from 'react';
-import { ProfilePropsType } from '../Profile';
 import styles from './MyPosts.module.css'
 import Post from './Post/Post';
-import {PostPropsType} from './../../../redux/state';
+import {ActionTypes, AddPostActionCreator, PostPropsType, UpdateNewPostTextActionCreator} from './../../../redux/state';
 
 type MypostsPropsType = {
     postsData: Array<PostPropsType>
-    addPost: () => void
     newPostText: string
-    updateNewPostText: (newPostText: string) => void
+    dispatch: (action: ActionTypes) => void
 }
 
 function MyPosts(props: MypostsPropsType ) {
     let newPostElement = React.createRef<HTMLTextAreaElement>();
 
     let addPost = () => {
-        //пишем такую странную дичь потому что тайпСкрипт переживает что в результате этого
-        // newPostElement.current.value может придти не тип "строка" а undefined
-        props.addPost()
+        props.dispatch(AddPostActionCreator())
         }
 
-
+    //пишем такую странную дичь потому что тайпСкрипт переживает что в результате этого
+    // newPostElement.current.value может придти не тип "строка" а undefined
     let onPostChange = () => {
         if(newPostElement.current) {
-            props.updateNewPostText(newPostElement.current.value)
+            props.dispatch(UpdateNewPostTextActionCreator(newPostElement.current.value))
 
         }
     }
