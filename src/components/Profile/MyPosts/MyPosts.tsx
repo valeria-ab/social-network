@@ -31,7 +31,7 @@ function MyPosts(props: MypostsPropsType ) {
                 <div>
                     <textarea
                         ref={newPostElement}
-                        value={props.newPostText}
+                        placeholder={props.newPostText}
                         onChange={onPostChange}
                     ></textarea>
                 </div>
