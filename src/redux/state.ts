@@ -1,3 +1,6 @@
+import profileReducer, {AddPostActionType,  UpdateNewPostTextActionType} from './profile-reducer'
+import dialogsReducer, { SendMessageActionType, UpdateNewMessageBodyTextActionType} from './dialogs-reducer';
+
 export type PostPropsType = {
     id: number
     postMessage: string
@@ -27,27 +30,14 @@ export type StatePropsType = {
     dialogsPage: DialogsPageType
 }
 
-type AddPostActionType = {
-    type: 'ADD-POST'
-}
-
-//тайпсриптовая штучка аналогичная AddPostActionType,
-// но позволяющая не писать типизацию 100 раз, а брать её из экшн креэйтеров
-type UpdateNewPostTextActionType = ReturnType<typeof UpdateNewPostTextActionCreator>
-type UpdateNewMessageBodyTextActionType = ReturnType<typeof UpdateNewMessageBodyActionCreator>
-type SendMessageActionType = ReturnType<typeof SendMessageActionCreator>
-
-
-
-export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
-    SendMessageActionType
+export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType | SendMessageActionType
 
 export type StoreType = {
     _state: StatePropsType
     getState: () => StatePropsType
     _callSubscriber: () => void
-   /* addPost: () => void
-    updateNewPostText: (newPostText: string) => void*/
+    /* addPost: () => void
+     updateNewPostText: (newPostText: string) => void*/
     subscribe: (observer: () => void) => void
     dispatch: (action: ActionTypes) => void
 }
@@ -59,7 +49,7 @@ let store: StoreType = {
                 {id: 1, postMessage: 'Hi! It\'s my first post', likesCount: 3},
                 {id: 2, postMessage: 'Yo!', likesCount: 12}
             ],
-            newPostText: 'Что у Вас нового?'
+            newPostText: ''
         },
         dialogsPage: {
             dialogsData: [
@@ -95,50 +85,14 @@ let store: StoreType = {
     //методы меняющие стейт
 
     dispatch(action: ActionTypes) {
-        if (action.type === 'ADD-POST') {
-            let newPost: PostPropsType = {
-                id: 3,
-                postMessage: this._state.profilePage.newPostText,
-                likesCount: 0
-            }
-            this._state.profilePage.postsData.push(newPost)
-            this._state.profilePage.newPostText = ''
-            this._callSubscriber()
-        } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
-            this._state.profilePage.newPostText = action.newPostText
-            this._callSubscriber()
-        } else if (action.type === 'UPDATE-NEW-MESSAGE-BODY') {
-            this._state.dialogsPage.newMessageBody = action.newMessageBody
-            this._callSubscriber()
-        } else if (action.type === 'SEND-MESSAGE') {
-            let newMessage: MessagePropsType = {
-                id: 5,
-                message: this._state.dialogsPage.newMessageBody,
-            }
-            this._state.dialogsPage.messagesData.push(newMessage)
-            this._state.dialogsPage.newMessageBody = ''
-            this._callSubscriber()
 
-        }
+        this._state.profilePage = profileReducer(this._state.profilePage, action)
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
+
+        this._callSubscriber()
     }
 }
 
- export const AddPostActionCreator = ():AddPostActionType => ( {type: 'ADD-POST'})
-
-
-export const UpdateNewPostTextActionCreator = (text: string) => ({
-        type: 'UPDATE-NEW-POST-TEXT',
-        newPostText: text
-    }) as const
-
-export const UpdateNewMessageBodyActionCreator = (messageBody: string) => ( {
-    type: 'UPDATE-NEW-MESSAGE-BODY',
-    newMessageBody: messageBody
-}) as const
-
-export const SendMessageActionCreator = () => ( {
-    type: 'SEND-MESSAGE'
-}) as const
 
 
 export default store;

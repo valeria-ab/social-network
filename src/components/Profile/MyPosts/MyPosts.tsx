@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './MyPosts.module.css'
 import Post from './Post/Post';
-import {ActionTypes, AddPostActionCreator, PostPropsType, UpdateNewPostTextActionCreator} from './../../../redux/state';
+import { AddPostActionCreator,  UpdateNewPostTextActionCreator} from './../../../redux/profile-reducer';
+import {ActionTypes, PostPropsType} from '../../../redux/state';
 
 type MypostsPropsType = {
     postsData: Array<PostPropsType>
@@ -31,7 +32,8 @@ function MyPosts(props: MypostsPropsType ) {
                 <div>
                     <textarea
                         ref={newPostElement}
-                        placeholder={props.newPostText}
+                        value={props.newPostText}
+                        placeholder={'Что у Вас нового?'}
                         onChange={onPostChange}
                     ></textarea>
                 </div>
