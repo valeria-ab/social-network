@@ -12,6 +12,7 @@ type AppPropsType = {
     dispatch: (action: ActionTypes) => void
 }
 
+
 function App(props: AppPropsType) {
     return (
         <div className="app-wrapper">
