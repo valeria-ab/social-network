@@ -2,27 +2,25 @@ import React from 'react';
 import styles from './MyPosts.module.css'
 import Post from './Post/Post';
 import { AddPostActionCreator,  UpdateNewPostTextActionCreator} from './../../../redux/profile-reducer';
-import {ActionTypes, PostPropsType} from '../../../redux/state';
+import {ActionTypes, PostPropsType} from '../../../redux/store';
 
 type MypostsPropsType = {
     postsData: Array<PostPropsType>
     newPostText: string
-    dispatch: (action: ActionTypes) => void
+    addPost: () => void
+    updateNewPostText: (newPostText: string) => void
 }
 
 function MyPosts(props: MypostsPropsType ) {
     let newPostElement = React.createRef<HTMLTextAreaElement>();
 
-    let addPost = () => {
-        props.dispatch(AddPostActionCreator())
-        }
+    let onAddPost = () => {  props.addPost()  }
 
     //пишем такую странную дичь потому что тайпСкрипт переживает что в результате этого
     // newPostElement.current.value может придти не тип "строка" а undefined
     let onPostChange = () => {
         if(newPostElement.current) {
-            props.dispatch(UpdateNewPostTextActionCreator(newPostElement.current.value))
-
+            props.updateNewPostText(newPostElement.current.value)
         }
     }
 
@@ -38,7 +36,7 @@ function MyPosts(props: MypostsPropsType ) {
                     ></textarea>
                 </div>
                 <div>
-                    <button onClick={addPost}>Add post</button>
+                    <button onClick={onAddPost}>Add post</button>
                 </div>
                 <div className={styles.posts} >
                     {

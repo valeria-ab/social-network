@@ -1,4 +1,4 @@
-import {ActionTypes, PostPropsType, ProfilePageType} from './state';
+import {ActionTypes, PostPropsType, ProfilePageType} from './store';
 
 
 //тайпсриптовая штучка аналогичная type AddPostActionType = { type: 'ADD-POST'}
@@ -17,8 +17,15 @@ export const UpdateNewPostTextActionCreator = (text: string) => ({
     newPostText: text
 }) as const
 
+const initialState = {
+    postsData: [
+        {id: 1, postMessage: 'Hi! It\'s my first post', likesCount: 3},
+        {id: 2, postMessage: 'Yo!', likesCount: 12}
+    ],
+    newPostText: ''
+}
 
-const profileReducer = (state: ProfilePageType, action: ActionTypes) => {
+const profileReducer = (state: ProfilePageType = initialState, action: ActionTypes) => {
     switch (action.type) {
         case 'ADD-POST':
             let newPost: PostPropsType = {

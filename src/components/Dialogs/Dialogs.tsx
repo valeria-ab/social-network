@@ -2,21 +2,24 @@ import React from 'react';
 import styles from '../Dialogs/Dialogs.module.css';
 import DialogItem from './DialogItem/DialogItem';
 import Message from './Message/Message';
-import {SendMessageActionCreator, UpdateNewMessageBodyActionCreator} from './../../redux/dialogs-reducer';
-import {StoreType} from '../../redux/state';
+import {DialogPropsType, MessagePropsType} from '../../redux/store';
 
 type DialogsPropsType = {
-   store: StoreType
+    dialogsData: Array<DialogPropsType>
+    messagesData: Array<MessagePropsType>
+    newMessageBody: string
+    onNewMessageChange: (messageBody: string) => void
+    sendMessage: () => void
 }
 
 function Dialogs(props: DialogsPropsType) {
-    let state = props.store.getState().dialogsPage
+
     return (
         <div className={styles.dialogs}>
 
             <div className={styles.dialogsItems}>
                 {
-                    state.dialogsData.map(
+                   props.dialogsData.map(
                         el => <DialogItem
                             name={el.name}
                             id={el.id}
@@ -28,7 +31,7 @@ function Dialogs(props: DialogsPropsType) {
 
             <div className={styles.messages}>
                 {
-                    state.messagesData.map(
+                    props.messagesData.map(
                         el => <Message
                             message={el.message}
                         />
@@ -36,15 +39,15 @@ function Dialogs(props: DialogsPropsType) {
 
                 <div>
       <textarea
-          value={state.newMessageBody}
+          value={props.newMessageBody}
           placeholder={'Enter your message...'}
           onChange={(event) => {
               let messageBody = event.target.value
-              props.store.dispatch(UpdateNewMessageBodyActionCreator(messageBody))
+              props.onNewMessageChange(messageBody)
       }}
       >
       </textarea>
-                    <button onClick={() => props.store.dispatch(SendMessageActionCreator())}>Send</button>
+                    <button onClick={props.sendMessage}>Send</button>
                 </div>
             </div>
         </div>
