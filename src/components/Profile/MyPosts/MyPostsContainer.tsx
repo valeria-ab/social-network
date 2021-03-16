@@ -1,29 +1,37 @@
 import React from 'react';
-import {StoreType} from '../../../redux/store';
+import StoreContext from '../../StoreContext';
 import {AddPostActionCreator, UpdateNewPostTextActionCreator} from './../../../redux/profile-reducer';
 import MyPosts from "./MyPosts";
 
-type MypostsContainerPropsType = {
-    store: StoreType
-}
 
-function MyPostsContainer(props: MypostsContainerPropsType) {
-const state = props.store.getState()
 
-    let addPost = () => {
-        props.store.dispatch(AddPostActionCreator())
-    }
+function MyPostsContainer() {
+    return (
+        //фигурная скобка должна быть на новой строке или ниче не работает. кек
+        <StoreContext.Consumer>
+            {
+            (store) => {
+                const state = store.getState()
 
-    let onPostChange = (newPostText: string) => {
-        props.store.dispatch(UpdateNewPostTextActionCreator(newPostText))
-    }
+                let addPost = () => {
+                    store.dispatch(AddPostActionCreator())
+                }
 
-    return (<MyPosts
-        addPost={addPost}
-        updateNewPostText={onPostChange}
-        postsData={state.profilePage.postsData}
-        newPostText={state.profilePage.newPostText}
-    />)
+                let onPostChange = (newPostText: string) => {
+                    store.dispatch(UpdateNewPostTextActionCreator(newPostText))
+                }
+
+                return <MyPosts
+                    addPost={addPost}
+                    updateNewPostText={onPostChange}
+                    postsData={state.profilePage.postsData}
+                    newPostText={state.profilePage.newPostText}
+                />
+            }
+        }
+
+        </StoreContext.Consumer>
+    )
 }
 
 export default MyPostsContainer;
