@@ -3,13 +3,16 @@ import profileReducer from "./profile-reducer";
 import dialogsReducer from "./dialogs-reducer";
 import { StoreType } from "./store";
 
-//редаксовская ф-я смешивающая редьюсеры
-const reducers = combineReducers({
+//редаксовская ф-я смешивающая редюсеры
+const rootReducer = combineReducers({
    profilePage: profileReducer,
     dialogsPage: dialogsReducer
 })
 
-//автоматически createStore создаёт внутри себя стэйт у которого есть свойства описанные в reducers
-const store: StoreType = createStore(reducers)
+//typeof rootReducer - это типизация функции, а ф-я что-то возвращает; и мы говорим дай мне возвращаемый тип
+export type AppStateType = ReturnType<typeof rootReducer>
 
-export default store;
+//автоматически createStore создаёт внутри себя стэйт у которого есть свойства описанные в reducers
+export const store = createStore(rootReducer)
+
+

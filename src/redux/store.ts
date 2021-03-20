@@ -1,25 +1,25 @@
 import profileReducer, {AddPostActionType,  UpdateNewPostTextActionType} from './profile-reducer'
 import dialogsReducer, { SendMessageActionType, UpdateNewMessageBodyTextActionType} from './dialogs-reducer';
 
-export type PostPropsType = {
+type PostPropsType = {
     id: number
     postMessage: string
     likesCount: number
 }
-export type MessagePropsType = {
+type MessagePropsType = {
     id: number
     message: string
 }
-export type DialogPropsType = {
+type DialogPropsType = {
     id: number
     name: string
 }
 
-export type ProfilePageType = {
+type ProfilePageType = {
     postsData: Array<PostPropsType>
     newPostText: string
 }
-export type DialogsPageType = {
+type DialogsPageType = {
     dialogsData: Array<DialogPropsType>
     messagesData: Array<MessagePropsType>
     newMessageBody: string

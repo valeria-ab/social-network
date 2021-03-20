@@ -1,4 +1,21 @@
-import {ActionTypes, DialogsPageType, MessagePropsType } from './store';
+import {ActionTypes} from './store';
+
+export type DialogPropsType = {
+    id: number
+    name: string
+}
+export type MessagePropsType = {
+    id: number
+    message: string
+}
+
+//или type DialogsPageType = type of initialState и не придётся писать всё это ручками
+export type DialogsPageType = {
+    dialogsData: Array<DialogPropsType>
+    messagesData: Array<MessagePropsType>
+    newMessageBody: string
+}
+
 
 //тайпсриптовая штучка аналогичная AddPostActionType,
 // но позволяющая не писать типизацию 100 раз, а брать её из экшн креэйтеров
@@ -31,7 +48,7 @@ const initialState = {
     newMessageBody: ''
 }
 
-const dialogsReducer = (state: DialogsPageType = initialState, action: ActionTypes) => {
+const dialogsReducer = (state: DialogsPageType = initialState, action: ActionTypes):DialogsPageType => {
     switch (action.type) {
         case 'UPDATE-NEW-MESSAGE-BODY':
             state.newMessageBody = action.newMessageBody

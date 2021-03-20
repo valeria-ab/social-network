@@ -2,13 +2,12 @@ import React from 'react';
 import styles from '../Dialogs/Dialogs.module.css';
 import DialogItem from './DialogItem/DialogItem';
 import Message from './Message/Message';
-import {DialogPropsType, MessagePropsType} from '../../redux/store';
+import {DialogsPageType} from "../../redux/dialogs-reducer";
+
 
 type DialogsPropsType = {
-    dialogsData: Array<DialogPropsType>
-    messagesData: Array<MessagePropsType>
-    newMessageBody: string
-    onNewMessageChange: (messageBody: string) => void
+    dialogsPage: DialogsPageType
+    updateNewMessageBody: (messageBody: string) => void
     sendMessage: () => void
 }
 
@@ -19,7 +18,7 @@ function Dialogs(props: DialogsPropsType) {
 
             <div className={styles.dialogsItems}>
                 {
-                   props.dialogsData.map(
+                   props.dialogsPage.dialogsData.map(
                         el => <DialogItem
                             name={el.name}
                             id={el.id}
@@ -31,7 +30,7 @@ function Dialogs(props: DialogsPropsType) {
 
             <div className={styles.messages}>
                 {
-                    props.messagesData.map(
+                    props.dialogsPage.messagesData.map(
                         el => <Message
                             message={el.message}
                         />
@@ -39,11 +38,11 @@ function Dialogs(props: DialogsPropsType) {
 
                 <div>
       <textarea
-          value={props.newMessageBody}
+          value={props.dialogsPage.newMessageBody}
           placeholder={'Enter your message...'}
           onChange={(event) => {
               let messageBody = event.target.value
-              props.onNewMessageChange(messageBody)
+              props.updateNewMessageBody(messageBody)
       }}
       >
       </textarea>
