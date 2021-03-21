@@ -1,4 +1,5 @@
-import {ActionTypes} from './store';
+import {ActionTypes} from "./redux-store";
+
 
 export type DialogPropsType = {
     id: number
@@ -32,7 +33,7 @@ export const SendMessageActionCreator = () => ({
     type: 'SEND-MESSAGE'
 }) as const
 
-const initialState = {
+const initialState:DialogsPageType = {
     dialogsData: [
         {id: 1, name: 'Саша'},
         {id: 2, name: 'Света'},
@@ -49,19 +50,28 @@ const initialState = {
 }
 
 const dialogsReducer = (state: DialogsPageType = initialState, action: ActionTypes):DialogsPageType => {
+    let stateCopy;
+
     switch (action.type) {
         case 'UPDATE-NEW-MESSAGE-BODY':
-            state.newMessageBody = action.newMessageBody
-            return state;
+            stateCopy = {
+                ...state,
+                newMessageBody: action.newMessageBody
+            }
+            return stateCopy;
 
         case   'SEND-MESSAGE':
             let newMessage: MessagePropsType = {
                 id: 5,
                 message: state.newMessageBody,
             }
-            state.messagesData.push(newMessage)
-            state.newMessageBody = ''
-            return state;
+            stateCopy = {
+                ...state,
+                messagesData: [...state.messagesData, newMessage],
+                newMessageBody: ''
+            }
+
+            return stateCopy;
 
         default:
             return state;

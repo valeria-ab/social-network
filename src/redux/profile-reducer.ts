@@ -1,4 +1,5 @@
-import {ActionTypes} from './store';
+import {ActionTypes} from "./redux-store";
+
 
 export type ProfilePageType = {
     postsData: Array<PostPropsType>
@@ -42,15 +43,18 @@ const profileReducer = (state: ProfilePageType = initialState, action: ActionTyp
                 postMessage: state.newPostText,
                 likesCount: 0
             }
-            let stateCopy = {...state}
-            stateCopy.postsData = [...state.postsData]
-            stateCopy.postsData.push(newPost)
-            stateCopy.newPostText = ''
+            let stateCopy = {
+                ...state,
+                postsData: [...state.postsData, newPost],
+                newPostText: ''
+            }
             return stateCopy;
         }
         case 'UPDATE-NEW-POST-TEXT': {
-            let stateCopy = {...state}
-            stateCopy.newPostText = action.newPostText
+            let stateCopy = {
+                ...state,
+                newPostText: action.newPostText
+            }
             return stateCopy;
         }
         default:

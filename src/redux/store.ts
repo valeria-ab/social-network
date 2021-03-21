@@ -25,12 +25,12 @@ type DialogsPageType = {
     newMessageBody: string
 }
 
-export type StatePropsType = {
+type StatePropsType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
 }
 
-export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType | SendMessageActionType
+type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType | SendMessageActionType
 
 export type StoreType = {
     _state: StatePropsType

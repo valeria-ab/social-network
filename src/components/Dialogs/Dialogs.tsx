@@ -20,6 +20,7 @@ function Dialogs(props: DialogsPropsType) {
                 {
                    props.dialogsPage.dialogsData.map(
                         el => <DialogItem
+                            key={el.id}
                             name={el.name}
                             id={el.id}
                         />
