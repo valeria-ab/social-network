@@ -5,7 +5,11 @@ import dialogsReducer, {
     SendMessageActionType,
     UpdateNewMessageBodyTextActionType
 } from "./dialogs-reducer";
-import usersReducer, {FollowActionType, SetUsersActionType, UnfollowActionType, UsersPageType} from "./users-reducer";
+import {
+    FollowActionType,
+    SetUsersActionType,
+    UnfollowActionType, UsersPageType, usersReducer
+} from "./users-reducer";
 
 export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
     SendMessageActionType | FollowActionType | UnfollowActionType | SetUsersActionType
@@ -14,7 +18,7 @@ export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | Upd
 export type StatePropsType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
-    usersPage: UsersPageType
+    usersPage:UsersPageType
 }
 
 //редаксовская ф-я смешивающая редюсеры
