@@ -5,6 +5,7 @@ import Message from './Message/Message';
 import {DialogsPageType} from "../../redux/dialogs-reducer";
 
 
+
 type DialogsPropsType = {
     dialogsPage: DialogsPageType
     updateNewMessageBody: (messageBody: string) => void

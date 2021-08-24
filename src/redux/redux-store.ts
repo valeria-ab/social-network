@@ -6,26 +6,31 @@ import dialogsReducer, {
     UpdateNewMessageBodyTextActionType
 } from "./dialogs-reducer";
 import {
-    FollowActionType,
-    SetUsersActionType,
-    UnfollowActionType, UsersPageType, usersReducer
+    FollowActionType, initialUsersState, setCurrentPageActionType, setTotalUsersCountActionType,
+    SetUsersActionType, toggleFollowingProgressActionType, toggleIsFetchingActionType,
+    UnfollowActionType, usersReducer
 } from "./users-reducer";
+import authReducer from "./auth-reducer";
+import sidebarReducer from "./sidebar-reducer";
 
 export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
-    SendMessageActionType | FollowActionType | UnfollowActionType | SetUsersActionType
+    SendMessageActionType | FollowActionType | UnfollowActionType | SetUsersActionType | setCurrentPageActionType |
+    setTotalUsersCountActionType | toggleIsFetchingActionType | toggleFollowingProgressActionType
 
 
 export type StatePropsType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
-    usersPage:UsersPageType
+    usersPage:initialUsersState
 }
 
 //редаксовская ф-я смешивающая редюсеры
 const rootReducer = combineReducers({
-   profilePage: profileReducer,
+    profilePage: profileReducer,
     dialogsPage: dialogsReducer,
-    usersPage: usersReducer
+    sidebar: sidebarReducer,
+    usersPage: usersReducer,
+    auth: authReducer
 })
 
 

@@ -5,58 +5,44 @@ const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT';
+const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
+const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS';
 
 type UsersLocationType = {
     city: string
     country: string
 }
 export type UserType = {
-    id: number
+/*    id: number
     photoURL: string
     followed: boolean
     fullName: string
     status: string
-    location: UsersLocationType
+    location: UsersLocationType*/
+
+    name: string
+    id: number
+    photos: {
+        small: any
+        large: any
+    }
+    status: string
+    followed: boolean
+
 }
 
-
-export type UsersPageType = {
-    users: Array<UserType>
-    pageSize: number
-    totalUsersCount: number
-    currentPage: number
-}
-const initialState: UsersPageType = {
-    users: [/*  {
-              id: 1,
-              photoUrl: 'https://argumenti.ru/images/arhnews/583332.jpg',
-              followed: true,
-              fullName: 'Dmitry Nagiev',
-              status: 'I am a boss',
-              location: {city: 'Moscow', country: 'Russia'}
-          },
-          {
-              id: 2,
-              photoUrl: 'https://avatars.mds.yandex.net/get-zen_doc/1875669/pub_5cfc1492babd4000b092d023_5cfc160822f0d900afbfcac5/scale_1200',
-              followed: false,
-              fullName: 'Larisa Guzeeva',
-              status: 'I am a boss too',
-              location: {city: 'Moscow', country: 'Russia'}
-          },
-          {
-              id: 3,
-              photoUrl: 'https://bykvu.com/wp-content/uploads/2015/06/01/e0173d8973a213a541f7a730d3ba3e85-1184x1100.jpg',
-              followed: false,
-              fullName: 'Vladimir Zhirinovsky',
-              status: 'I am a real boss',
-              location: {city: 'Moscow', country: 'Russia'}
-          }*/],
+const initialState = {
+    users: [] as Array<UserType>,
     pageSize: 5,
     totalUsersCount: 0,
-    currentPage: 1
+    currentPage: 1,
+    isFetching: true,
+    followingInProgress: [] as Array<number>
 }
 
-export const usersReducer = (state: UsersPageType = initialState, action: ActionTypes):UsersPageType => {
+export type initialUsersState = typeof initialState;
+
+export const usersReducer = (state = initialState, action: ActionTypes):initialUsersState => {
 
     switch (action.type) {
         case FOLLOW:
@@ -96,6 +82,19 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
                 ...state,
                 totalUsersCount: action.count
             }
+        case TOGGLE_IS_FETCHING: {
+            return { ...state,
+                isFetching: action.isFetching
+            }
+        }
+        case TOGGLE_IS_FOLLOWING_PROGRESS: {
+            return {
+                ...state,
+                followingInProgress: action.isFetching
+                    ? [...state.followingInProgress, action.userId]
+                    : state.followingInProgress.filter(id => id != action.userId)
+            }
+        }
 
         default:
             return state
@@ -103,33 +102,48 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
 }
 
 //тайпсриптовая штучка аналогичная AddPostActionType,
-// но позволяющая не писать типизацию 100 раз, а брать её из экшн креэйтеров
-export type FollowActionType = ReturnType<typeof followAC>
-export type UnfollowActionType = ReturnType<typeof unfollowAC>
-export type SetUsersActionType = ReturnType<typeof setUsersAC>
+// но позволяющая не писать типизацию 100 раз, а брать её из экшн криэйтеров
+export type FollowActionType = ReturnType<typeof follow>
+export type UnfollowActionType = ReturnType<typeof unfollow>
+export type SetUsersActionType = ReturnType<typeof setUsers>
+export type setCurrentPageActionType = ReturnType<typeof setCurrentPage>
+export type setTotalUsersCountActionType = ReturnType<typeof setTotalUsersCount>
+export type toggleIsFetchingActionType = ReturnType<typeof toggleIsFetching>
+export type toggleFollowingProgressActionType = ReturnType<typeof toggleFollowingProgress>
 
 
-export const followAC = (userID: number) => ({
+export const follow = (userID: number) => ({
     type: FOLLOW,
     userID
 }) as const
 
-export const unfollowAC = (userID: number) => ({
+export const unfollow = (userID: number) => ({
     type: UNFOLLOW,
     userID
 }) as const
 
-export const setUsersAC = (users: Array<UserType>) => ({
+export const setUsers = (users: Array<UserType>) => ({
     type: SET_USERS,
     users
 }) as const
 
-export const setCurrentPageAC = (currentPage: number) => ({
+export const setCurrentPage = (currentPage: number) => ({
     type: SET_CURRENT_PAGE,
     currentPage
 }) as const
 
-export const setTotalUsersCountAC = (totalUsersCount: number) => ({
+export const setTotalUsersCount = (totalUsersCount: number) => ({
     type: SET_TOTAL_USERS_COUNT,
     count: totalUsersCount
 }) as const
+
+
+export const toggleIsFetching = (isFetching: boolean) => ({
+    type: TOGGLE_IS_FETCHING,
+    isFetching
+}) as const
+
+export const toggleFollowingProgress = (isFetching: boolean, userId: number) => ({
+    type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId
+}) as const
+

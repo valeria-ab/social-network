@@ -1,34 +1,48 @@
 import React from 'react';
-import {UsersPageType} from "../../redux/users-reducer";
 import styles from "./Users.module.css"
-import * as axios from "axios";
 import userPhoto from '../../assets/images/i.webp'
-import {UsersPropsType} from "./UsersContainer";
+import {UsersContainerPropsType} from "./UsersContainer";
+import {UserType} from "../../redux/users-reducer";
+
+type UsersPropsType = {
+    totalUsersCount: number
+    pageSize: number
+    currentPage: number
+    onPageChanged: (pageNumber: number) => void
+    users: Array<UserType>
+    follow: (userID:number) => void
+    unfollow: (userID:number) => void
+}
 
 
-
-function Users(props: UsersPropsType) {
-    let getUsers = () => {
-        if (props.usersPage.users.length === 0) {
-
-            axios.get("https://social-network.samuraijs.com/api/1.0/users").then(response => {
-                props.setUsers(response.data.items)
-            });
+const Users = (props: UsersPropsType) => {
 
 
-        }
+    let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
+
+    let pages = [];
+    for (let i = 0; i <= pagesCount; i++) {
+        pages.push(i)
     }
 
 
-
     return <div>
-        <button onClick={getUsers}>Get users</button>
+        <div>
+            {pages.map(p => {
+                return <span className={styles.selectedPage}
+                             onClick={() => {
+                                 props.onPageChanged(p)
+                             }}>{p}</span>
+            })}
+
+        </div>
+
         {
-            props.usersPage.users.map(u => <div key={u.id}>
+            props.users.map(u => <div key={u.id}>
                 <span>
                     <div>
                       {/*  <img src={u.photoUrl} className={styles.userPhoto}/>*/}
-                        <img src={u.photos.small != null ? u.photos.small : userPhoto} className={styles.userPhoto}/>
+                        <img src={u.photos.small != null ? u.photos.small : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYXYJjncOgjVgYKgD-VHvVHHcA14VgyUf2Xw&usqp=CAU"} className={styles.userPhoto}/>
                     </div>
                     <div>
                         {u.followed
