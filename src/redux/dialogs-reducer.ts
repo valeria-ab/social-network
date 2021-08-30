@@ -22,16 +22,16 @@ export type DialogsPageType = typeof initialState
 
 //тайпсриптовая штучка аналогичная AddPostActionType,
 // но позволяющая не писать типизацию 100 раз, а брать её из экшн креэйтеров
-export type UpdateNewMessageBodyTextActionType = ReturnType<typeof UpdateNewMessageBodyActionCreator>
-export type SendMessageActionType = ReturnType<typeof SendMessageActionCreator>
+export type UpdateNewMessageBodyTextActionType = ReturnType<typeof updateNewMessageBody>
+export type SendMessageActionType = ReturnType<typeof sendMessage>
 
 
-export const UpdateNewMessageBodyActionCreator = (messageBody: string) => ({
+export const updateNewMessageBody = (messageBody: string) => ({
     type: 'UPDATE-NEW-MESSAGE-BODY',
     newMessageBody: messageBody
 }) as const
 
-export const SendMessageActionCreator = () => ({
+export const sendMessage = () => ({
     type: 'SEND-MESSAGE'
 }) as const
 

@@ -1,9 +1,7 @@
 import React from 'react';
 import Dialogs from "./Dialogs";
 import {
-    DialogsPageType,
-    SendMessageActionCreator,
-    UpdateNewMessageBodyActionCreator
+    DialogsPageType, sendMessage, updateNewMessageBody
 } from "../../redux/dialogs-reducer";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
@@ -25,15 +23,10 @@ const mapStateToProps = (state:StatePropsType):MapStateToPropsType => {
     }
 }
 
-const mapDispatchToProps = (dispatch:Dispatch):MapDispatchToPropsType => {
-    return {
-        updateNewMessageBody: (messageBody:string) =>
-                dispatch(UpdateNewMessageBodyActionCreator(messageBody)),
-        sendMessage: () => dispatch(SendMessageActionCreator())
-
-    }
-}
 
 
-export const DialogsContainer = connect(mapStateToProps,mapDispatchToProps)(Dialogs)
+export const DialogsContainer = connect(mapStateToProps,{
+    updateNewMessageBody,
+    sendMessage
+})(Dialogs)
 
