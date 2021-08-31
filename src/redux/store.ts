@@ -32,7 +32,7 @@ type StatePropsType = {
 
 type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType | SendMessageActionType
 
-export type StoreType = {
+ type StoreType = {
     _state: StatePropsType
     getState: () => StatePropsType
     _callSubscriber: () => void
@@ -85,8 +85,8 @@ let store: StoreType = {
     //методы меняющие стейт
 
     dispatch(action: ActionTypes) {
-
-        this._state.profilePage = profileReducer(this._state.profilePage, action)
+/*
+        this._state.profilePage = profileReducer(this._state.profilePage, action)*/
         this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
 
         this._callSubscriber()

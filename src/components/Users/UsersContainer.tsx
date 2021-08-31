@@ -16,7 +16,7 @@ import axios from "axios";
 import Preloader from "../../common/Preloader/Preloader";
 
 
-export type MapStateToPropsType = {
+ type MapStateToPropsType = {
     users: Array<UserType>
     pageSize: number
     totalUsersCount: number
@@ -24,7 +24,7 @@ export type MapStateToPropsType = {
     isFetching: boolean
     /*  followingInProgress: any*/
 }
-export type MapDispatchToPropsType = {
+ type MapDispatchToPropsType = {
     follow: (userID: number) => void
     unfollow: (userID: number) => void
     setUsers: (users: Array<UserType>) => void

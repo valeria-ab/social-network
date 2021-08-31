@@ -1,5 +1,10 @@
 import {combineReducers, createStore} from "redux";
-import profileReducer, {AddPostActionType, ProfilePageType, UpdateNewPostTextActionType} from "./profile-reducer";
+import profileReducer, {
+    AddPostActionType,
+    ProfilePageType,
+    setUserProfileACActionType,
+    UpdateNewPostTextActionType
+} from "./profile-reducer";
 import dialogsReducer, {
     DialogsPageType,
     SendMessageActionType,
@@ -15,7 +20,7 @@ import sidebarReducer from "./sidebar-reducer";
 
 export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
     SendMessageActionType | FollowActionType | UnfollowActionType | SetUsersActionType | setCurrentPageActionType |
-    setTotalUsersCountActionType | toggleIsFetchingActionType | toggleFollowingProgressActionType
+    setTotalUsersCountActionType | toggleIsFetchingActionType | toggleFollowingProgressActionType | setUserProfileACActionType
 
 
 export type StatePropsType = {
@@ -41,5 +46,7 @@ export type AppStateType = ReturnType<typeof rootReducer>
 
 //автоматически createStore создаёт внутри себя стэйт у которого есть свойства описанные в reducers
 export const store = createStore(rootReducer)
+
+
 
 
