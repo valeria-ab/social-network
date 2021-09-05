@@ -3,6 +3,7 @@ import styles from "./Users.module.css"
 import {UserType} from "../../redux/users-reducer";
 import {NavLink} from 'react-router-dom';
 import axios from "axios";
+import {usersAPI} from "../../api/api";
 
 type UsersPropsType = {
     totalUsersCount: number
@@ -77,8 +78,9 @@ const Users = (props: UsersPropsType) => {
                                     })
                                     .then(response => {
                                         if (response.data.resultCode == 0) {
-                                            props.follow(u.id)
+                                        props.follow(u.id)
                                         }
+
                                     })
                             }}>Follow</button>
                         }
