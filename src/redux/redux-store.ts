@@ -1,4 +1,5 @@
-import {combineReducers, createStore} from "redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
+import thunkMiddleware from "redux-thunk";
 import profileReducer, {
     AddPostActionType,
     ProfilePageType,
@@ -11,16 +12,15 @@ import dialogsReducer, {
     UpdateNewMessageBodyTextActionType
 } from "./dialogs-reducer";
 import {
-    FollowActionType, initialUsersState, setCurrentPageActionType, setTotalUsersCountActionType,
+    FollowSuccessActionType, initialUsersState, setCurrentPageActionType, setTotalUsersCountActionType,
     SetUsersActionType, toggleFollowingProgressActionType, toggleIsFetchingActionType,
-    UnfollowActionType, usersReducer
+    UnfollowSuccessActionType, UsersPageActionTypes, usersReducer
 } from "./users-reducer";
 import authReducer from "./auth-reducer";
 import sidebarReducer from "./sidebar-reducer";
 
 export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
-    SendMessageActionType | FollowActionType | UnfollowActionType | SetUsersActionType | setCurrentPageActionType |
-    setTotalUsersCountActionType | toggleIsFetchingActionType | toggleFollowingProgressActionType | setUserProfileACActionType
+    SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType
 
 
 export type StatePropsType = {
@@ -45,7 +45,7 @@ const rootReducer = combineReducers({
 export type AppStateType = ReturnType<typeof rootReducer>
 
 //автоматически createStore создаёт внутри себя стэйт у которого есть свойства описанные в reducers
-export const store = createStore(rootReducer)
+export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 
 
