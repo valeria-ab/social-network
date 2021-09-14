@@ -9,9 +9,8 @@ import {
 } from "../../redux/users-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import Users from "./Users";
-import axios from "axios";
 import Preloader from "../../common/Preloader/Preloader";
-import {usersAPI} from "../../api/api";
+
 
 
 type MapStateToPropsType = {

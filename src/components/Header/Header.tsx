@@ -4,7 +4,7 @@ import {NavLink} from 'react-router-dom';
 
 type HeaderPropsType = {
     isAuth: boolean
-    login: string
+    login: string | null
 }
 
 function Header(props: HeaderPropsType) {

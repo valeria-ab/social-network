@@ -1,29 +1,37 @@
-import {ActionTypes} from "./redux-store";
+import {ActionTypes, AppStateType} from "./redux-store";
+import {Dispatch} from "redux";
+import {profileAPI, usersAPI} from "../api/api";
+import {ThunkAction} from "redux-thunk";
+import {AxiosResponse} from "axios";
 
 const ADD_POST = 'ADD-POST'
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
 const SET_USER_PROFILE = 'SET-USER-PROFILE'
 
+type ProfilePhotosType = {
+    small: string
+    large: string
+}
+
+type ProfileContactsType = {
+    facebook: string
+    website: null
+    vk: string
+    twitter: string
+    instagram: string
+    youtube: null
+    github: string
+    mainLink: null
+}
+
 export type ProfileResponseType = {
     aboutMe: string
-    contacts: {
-        facebook: string
-        website: null
-        vk: string
-        twitter: string
-        instagram: string
-        youtube: null
-        github: string
-        mainLink: null
-    }
+    contacts: ProfileContactsType
     lookingForAJob: true
     lookingForAJobDescription: string
     fullName: string
     userId: number
-    photos: {
-        small: string
-        large: string
-    }
+    photos: ProfilePhotosType
 
 }
 
@@ -44,6 +52,9 @@ export type AddPostActionType = ReturnType<typeof AddPostActionCreator>
 export type UpdateNewPostTextActionType = ReturnType<typeof UpdateNewPostTextActionCreator>
 export type setUserProfileACActionType = ReturnType<typeof setUserProfile>
 
+type ProfileResponse = {
+
+}
 
 
 const initialState:ProfilePageType = {
@@ -101,9 +112,22 @@ export const UpdateNewPostTextActionCreator = (text: string) => ({
     newPostText: text
 }) as const
 
-export const setUserProfile = (profile: ProfileResponseType) => ({
+ const setUserProfile = (profile: ProfileResponseType) => ({
     type: SET_USER_PROFILE,
     profile
 }) as const
+
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
+
+export const getUserProfile = (userId: string): ThunkType =>
+    (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+
+        profileAPI.getProfile(userId)
+            .then((response: AxiosResponse<ProfileResponseType>) => {
+                dispatch(setUserProfile(response.data))
+
+            })
+    }
+
 
 export default profileReducer;

@@ -11,16 +11,12 @@ import dialogsReducer, {
     SendMessageActionType,
     UpdateNewMessageBodyTextActionType
 } from "./dialogs-reducer";
-import {
-    FollowSuccessActionType, initialUsersState, setCurrentPageActionType, setTotalUsersCountActionType,
-    SetUsersActionType, toggleFollowingProgressActionType, toggleIsFetchingActionType,
-    UnfollowSuccessActionType, UsersPageActionTypes, usersReducer
-} from "./users-reducer";
-import authReducer from "./auth-reducer";
+import { initialUsersState, UsersPageActionTypes, usersReducer } from "./users-reducer";
 import sidebarReducer from "./sidebar-reducer";
+import authReducer, {setAuthUserDataActionType} from "./auth-reducer";
 
 export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
-    SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType
+    SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType | setAuthUserDataActionType
 
 
 export type StatePropsType = {
