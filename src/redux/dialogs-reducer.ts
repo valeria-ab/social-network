@@ -43,12 +43,13 @@ const initialState = {
         {id: 4, name: 'Коля'}
     ] as Array<DialogType>,
     messagesData: [
-        {id: 1, message: 'Дай в долг!'},
+        {id: 1, message: 'Я разбогател!'},
         {id: 2, message: 'Я набухалась'},
         {id: 3, message: 'Плету ковёр...'},
         {id: 4, message: 'Люблю хрючево..'}
     ] as Array<MessageType>,
-    newMessageBody: ''
+    newMessageBody: '',
+    isAuth: false
 }
 
 const dialogsReducer = (state: DialogsPageType = initialState, action: ActionTypes):DialogsPageType => {

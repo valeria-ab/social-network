@@ -39,6 +39,7 @@ export type ProfilePageType = {
     profile: null | ProfileResponseType
     postsData: Array<PostPropsType>
     newPostText: string
+    isAuth: boolean
 }
 export type PostPropsType = {
     id: number
@@ -63,7 +64,8 @@ const initialState:ProfilePageType = {
         {id: 1, postMessage: 'Hi! It\'s my first post', likesCount: 3},
         {id: 2, postMessage: 'Yo!', likesCount: 12}
     ],
-    newPostText: ''
+    newPostText: '',
+    isAuth: false
 }
 
 const profileReducer = (state: ProfilePageType = initialState, action: ActionTypes):ProfilePageType => {
