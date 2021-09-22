@@ -11,14 +11,9 @@ type DialogsPropsType = {
     dialogsPage: DialogsPageType
     updateNewMessageBody: (messageBody: string) => void
     sendMessage: () => void
-    isAuth: boolean
 }
 
 function Dialogs(props: DialogsPropsType) {
-
-    if(!props.isAuth) {
-        return <Redirect to={'/login'} />
-    }
 
     return (
         <div className={styles.dialogs}>
