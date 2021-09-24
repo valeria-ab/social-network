@@ -5,6 +5,7 @@ import {getUserProfile, ProfileResponseType} from "../../redux/profile-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import {Redirect, RouteComponentProps, withRouter} from 'react-router-dom';
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 type PathParamsType = {
     userId: string
@@ -43,13 +44,19 @@ class ProfileContainer extends React.Component<PropsType> {
     }
 }
 
-const AuthRedirectComponent = withAuthRedirect(ProfileContainer)
-
+/*const AuthRedirectComponent = withAuthRedirect(ProfileContainer)
 
 let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent)
+
+export default connect(mapStateToProps, {getUserProfile})(WithUrlDataContainerComponent);*/
 
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
     profile: state.profilePage.profile,
 })
 
-export default connect(mapStateToProps, {getUserProfile})(WithUrlDataContainerComponent);
+//вызовы идут снизу вверх - ProfileContainer оборачивается withAuthRedirect, то что она вернёт вызывается withRouter и т.д.
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, {getUserProfile}),
+    withRouter,
+    withAuthRedirect
+)(ProfileContainer)
