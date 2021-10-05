@@ -3,7 +3,7 @@ import thunkMiddleware from "redux-thunk";
 import profileReducer, {
     AddPostActionType,
     ProfilePageType,
-    setUserProfileACActionType,
+    setUserProfileACActionType, setUserStatusActionType,
     UpdateNewPostTextActionType
 } from "./profile-reducer";
 import dialogsReducer, {
@@ -16,7 +16,8 @@ import sidebarReducer from "./sidebar-reducer";
 import authReducer, {setAuthUserDataActionType} from "./auth-reducer";
 
 export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
-    SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType | setAuthUserDataActionType
+    SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType | setAuthUserDataActionType |
+    setUserStatusActionType
 
 
 export type StatePropsType = {

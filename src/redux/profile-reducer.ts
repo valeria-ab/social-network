@@ -7,6 +7,7 @@ import {AxiosResponse} from "axios";
 const ADD_POST = 'ADD-POST'
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
 const SET_USER_PROFILE = 'SET-USER-PROFILE'
+const SET_USER_STATUS = 'SET_USER_STATUS'
 
 type ProfilePhotosType = {
     small: string
@@ -32,7 +33,11 @@ export type ProfileResponseType = {
     fullName: string
     userId: number
     photos: ProfilePhotosType
+    resultCode: number
+}
 
+type UserStatusResponseType = {
+    response: string
 }
 
 export type ProfilePageType = {
@@ -40,6 +45,7 @@ export type ProfilePageType = {
     postsData: Array<PostPropsType>
     newPostText: string
     isAuth: boolean
+    status: string
 }
 export type PostPropsType = {
     id: number
@@ -52,23 +58,23 @@ export type PostPropsType = {
 export type AddPostActionType = ReturnType<typeof AddPostActionCreator>
 export type UpdateNewPostTextActionType = ReturnType<typeof UpdateNewPostTextActionCreator>
 export type setUserProfileACActionType = ReturnType<typeof setUserProfile>
+export type setUserStatusActionType = ReturnType<typeof setUserStatus>
 
-type ProfileResponse = {
-
-}
+type ProfileResponse = {}
 
 
-const initialState:ProfilePageType = {
+const initialState: ProfilePageType = {
     profile: null,
     postsData: [
         {id: 1, postMessage: 'Hi! It\'s my first post', likesCount: 3},
         {id: 2, postMessage: 'Yo!', likesCount: 12}
     ],
     newPostText: '',
-    isAuth: false
+    isAuth: false,
+    status: ''
 }
 
-const profileReducer = (state: ProfilePageType = initialState, action: ActionTypes):ProfilePageType => {
+const profileReducer = (state: ProfilePageType = initialState, action: ActionTypes): ProfilePageType => {
     switch (action.type) {
         case ADD_POST: {
             let newPost: PostPropsType = {
@@ -98,6 +104,13 @@ const profileReducer = (state: ProfilePageType = initialState, action: ActionTyp
             };
         }
 
+        case SET_USER_STATUS: {
+            return {
+                ...state,
+                status: action.status
+            };
+        }
+
         default:
             return state
     }
@@ -114,9 +127,14 @@ export const UpdateNewPostTextActionCreator = (text: string) => ({
     newPostText: text
 }) as const
 
- const setUserProfile = (profile: ProfileResponseType) => ({
+const setUserProfile = (profile: ProfileResponseType) => ({
     type: SET_USER_PROFILE,
     profile
+}) as const
+
+const setUserStatus = (status: string) => ({
+    type: SET_USER_STATUS,
+    status
 }) as const
 
 type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
@@ -128,6 +146,25 @@ export const getUserProfile = (userId: string): ThunkType =>
             .then((response: AxiosResponse<ProfileResponseType>) => {
                 dispatch(setUserProfile(response.data))
 
+            })
+    }
+
+export const getUserStatus = (userId: string): ThunkType =>
+    (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+        profileAPI.getStatus(userId)
+            .then((response: AxiosResponse<any>) => {
+                dispatch(setUserStatus(response.data))
+            })
+    }
+
+export const updateUserStatus = (status: string): ThunkType =>
+    (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+        profileAPI.updateStatus(status)
+            .then((response: AxiosResponse<ProfileResponseType>) => {
+                debugger
+                if (response.data.resultCode === 0) {
+                    dispatch(setUserStatus(status))
+                }
             })
     }
 

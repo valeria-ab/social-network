@@ -1,7 +1,7 @@
 import React from 'react';
 import Profile from "./Profile";
 import {connect} from "react-redux";
-import {getUserProfile, ProfileResponseType} from "../../redux/profile-reducer";
+import {getUserProfile, getUserStatus, ProfileResponseType, updateUserStatus} from "../../redux/profile-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import {Redirect, RouteComponentProps, withRouter} from 'react-router-dom';
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
@@ -13,10 +13,13 @@ type PathParamsType = {
 
 type MapStateToPropsType = {
     profile: null | ProfileResponseType
+    status: string
 }
 
 type MapDispatchToPropsType = {
     getUserProfile: (userId: string) => void
+    getUserStatus: (userId: string) => void
+    updateUserStatus: (status: string) => void
 }
 
 
@@ -29,9 +32,10 @@ class ProfileContainer extends React.Component<PropsType> {
         let userId = this.props.match.params.userId
 
         if (!userId) {
-            userId = '2'
+            userId = '13755'
         }
         this.props.getUserProfile(userId)
+        this.props.getUserStatus(userId)
 
     }
 
@@ -39,6 +43,8 @@ class ProfileContainer extends React.Component<PropsType> {
            return (
             <Profile {...this.props}
                      profile={this.props.profile}
+                     status={this.props.status}
+                     updateStatus={this.props.updateUserStatus}
             />
         )
     }
@@ -52,11 +58,12 @@ export default connect(mapStateToProps, {getUserProfile})(WithUrlDataContainerCo
 
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
     profile: state.profilePage.profile,
+    status: state.profilePage.status
 })
 
 //вызовы идут снизу вверх - ProfileContainer оборачивается withAuthRedirect, то что она вернёт вызывается withRouter и т.д.
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, {getUserProfile}),
+    connect(mapStateToProps, {getUserProfile,getUserStatus, updateUserStatus }),
     withRouter,
     withAuthRedirect
 )(ProfileContainer)
