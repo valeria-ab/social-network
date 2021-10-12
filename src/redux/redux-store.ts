@@ -14,6 +14,7 @@ import dialogsReducer, {
 import { initialUsersState, UsersPageActionTypes, usersReducer } from "./users-reducer";
 import sidebarReducer from "./sidebar-reducer";
 import authReducer, {setAuthUserDataActionType} from "./auth-reducer";
+import { reducer as formReducer } from "redux-form";
 
 export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
     SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType | setAuthUserDataActionType |
@@ -32,7 +33,8 @@ const rootReducer = combineReducers({
     dialogsPage: dialogsReducer,
     sidebar: sidebarReducer,
     usersPage: usersReducer,
-    auth: authReducer
+    auth: authReducer,
+    form: formReducer
 })
 
 

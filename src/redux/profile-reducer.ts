@@ -139,7 +139,7 @@ const setUserStatus = (status: string) => ({
 
 type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
 
-export const getUserProfile = (userId: string): ThunkType =>
+export const getUserProfile = (userId: number): ThunkType =>
     (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
 
         profileAPI.getProfile(userId)
@@ -149,7 +149,7 @@ export const getUserProfile = (userId: string): ThunkType =>
             })
     }
 
-export const getUserStatus = (userId: string): ThunkType =>
+export const getUserStatus = (userId: number): ThunkType =>
     (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
         profileAPI.getStatus(userId)
             .then((response: AxiosResponse<any>) => {
@@ -158,10 +158,11 @@ export const getUserStatus = (userId: string): ThunkType =>
     }
 
 export const updateUserStatus = (status: string): ThunkType =>
+
     (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
         profileAPI.updateStatus(status)
             .then((response: AxiosResponse<ProfileResponseType>) => {
-                debugger
+
                 if (response.data.resultCode === 0) {
                     dispatch(setUserStatus(status))
                 }

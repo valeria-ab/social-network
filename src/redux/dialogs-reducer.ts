@@ -39,14 +39,14 @@ const initialState = {
     dialogsData: [
         {id: 1, name: 'Саша'},
         {id: 2, name: 'Света'},
-        {id: 3, name: 'Надя'},
-        {id: 4, name: 'Коля'}
+        {id: 3, name: 'Полина'},
+        {id: 4, name: 'Brad'}
     ] as Array<DialogType>,
     messagesData: [
         {id: 1, message: 'Я разбогател!'},
         {id: 2, message: 'Я набухалась'},
-        {id: 3, message: 'Плету ковёр...'},
-        {id: 4, message: 'Люблю хрючево..'}
+        {id: 3, message: 'Диди, тип ти!'},
+        {id: 4, message: 'Frogs say: "ribit, ribit" '}
     ] as Array<MessageType>,
     newMessageBody: '',
     isAuth: false
