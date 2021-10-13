@@ -22,17 +22,11 @@ export type DialogsPageType = typeof initialState
 
 //тайпсриптовая штучка аналогичная AddPostActionType,
 // но позволяющая не писать типизацию 100 раз, а брать её из экшн креэйтеров
-export type UpdateNewMessageBodyTextActionType = ReturnType<typeof updateNewMessageBody>
 export type SendMessageActionType = ReturnType<typeof sendMessage>
 
 
-export const updateNewMessageBody = (messageBody: string) => ({
-    type: 'UPDATE-NEW-MESSAGE-BODY',
-    newMessageBody: messageBody
-}) as const
-
-export const sendMessage = () => ({
-    type: 'SEND-MESSAGE'
+export const sendMessage = (newMessageBody: string) => ({
+    type: 'SEND-MESSAGE', newMessageBody
 }) as const
 
 const initialState = {
@@ -48,30 +42,21 @@ const initialState = {
         {id: 3, message: 'Диди, тип ти!'},
         {id: 4, message: 'Frogs say: "ribit, ribit" '}
     ] as Array<MessageType>,
-    newMessageBody: '',
     isAuth: false
 }
 
-const dialogsReducer = (state: DialogsPageType = initialState, action: ActionTypes):DialogsPageType => {
+const dialogsReducer = (state: DialogsPageType = initialState, action: ActionTypes): DialogsPageType => {
     let stateCopy;
 
     switch (action.type) {
-        case 'UPDATE-NEW-MESSAGE-BODY':
-            stateCopy = {
-                ...state,
-                newMessageBody: action.newMessageBody
-            }
-            return stateCopy;
-
         case   'SEND-MESSAGE':
             let newMessage: MessageType = {
                 id: 5,
-                message: state.newMessageBody,
+                message: action.newMessageBody,
             }
             stateCopy = {
                 ...state,
-                messagesData: [...state.messagesData, newMessage],
-                newMessageBody: ''
+                messagesData: [...state.messagesData, newMessage]
             }
 
             return stateCopy;

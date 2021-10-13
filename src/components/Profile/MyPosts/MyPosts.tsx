@@ -2,55 +2,55 @@ import React from 'react';
 import styles from './MyPosts.module.css'
 import Post from './Post/Post';
 import {PostPropsType} from "../../../redux/profile-reducer";
+import {Field, InjectedFormProps, reduxForm} from "redux-form";
 
 
 type MypostsPropsType = {
     postsData: Array<PostPropsType>
-    newPostText: string
-    addPost: () => void
-    updateNewPostText: (newPostText: string) => void
+    addPost: (values:string) => void
 }
 
-function MyPosts(props: MypostsPropsType ) {
-    let newPostElement = React.createRef<HTMLTextAreaElement>();
 
-    let onAddPost = () => {  props.addPost()  }
+const MyPosts = (props: MypostsPropsType) => {
 
-    //пишем такую странную дичь потому что тайпСкрипт переживает что в результате этого
-    // newPostElement.current.value может придти не тип "строка" а undefined
-    let onPostChange = () => {
-        if(newPostElement.current) {
-            props.updateNewPostText(newPostElement.current.value)
-        }
+    let onAddPost = (values: any) => {
+        props.addPost(values)
     }
 
     return (
         <div>
-                <h3> My posts</h3>
-                <div>
-                    <textarea
-                        ref={newPostElement}
-                        value={props.newPostText}
-                        placeholder={'Что у Вас нового?'}
-                        onChange={onPostChange}
-                    ></textarea>
-                </div>
-                <div>
-                    <button onClick={onAddPost}>Add post</button>
-                </div>
-                <div className={styles.posts} >
-                    {
-                        props.postsData.map(
-                            el =>   <Post
-                                postMessage={el.postMessage}
-                                likesCount={el.likesCount}
-                            />
-                        )
-                    }
-                </div>
+            <h3> My posts</h3>
+            <AddNewPostFormRedux onSubmit={onAddPost}/>
+
+            <div className={styles.posts}>
+                {
+                    props.postsData.map(
+                        el => <Post
+                            postMessage={el.postMessage}
+                            likesCount={el.likesCount}
+                        />
+                    )
+                }
             </div>
+        </div>
 
     )
 }
+
+const AddNewPostForm = (props: any) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <Field component={"textarea"}
+                name={"newPostText"}
+                placeholder={'Что у Вас нового?'}
+            />
+            <div>
+                <button>Add post</button>
+            </div>
+        </form>
+    )
+}
+
+const AddNewPostFormRedux = reduxForm({form: "ProfileAddNewPostForm"})(AddNewPostForm)
 
 export default MyPosts;

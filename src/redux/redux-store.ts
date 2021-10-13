@@ -3,20 +3,18 @@ import thunkMiddleware from "redux-thunk";
 import profileReducer, {
     AddPostActionType,
     ProfilePageType,
-    setUserProfileACActionType, setUserStatusActionType,
-    UpdateNewPostTextActionType
+    setUserProfileACActionType, setUserStatusActionType
 } from "./profile-reducer";
 import dialogsReducer, {
     DialogsPageType,
-    SendMessageActionType,
-    UpdateNewMessageBodyTextActionType
+    SendMessageActionType
 } from "./dialogs-reducer";
 import { initialUsersState, UsersPageActionTypes, usersReducer } from "./users-reducer";
 import sidebarReducer from "./sidebar-reducer";
 import authReducer, {setAuthUserDataActionType} from "./auth-reducer";
 import { reducer as formReducer } from "redux-form";
 
-export type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType |
+export type  ActionTypes = AddPostActionType  |
     SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType | setAuthUserDataActionType |
     setUserStatusActionType
 

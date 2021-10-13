@@ -5,7 +5,6 @@ import {ThunkAction} from "redux-thunk";
 import {AxiosResponse} from "axios";
 
 const ADD_POST = 'ADD-POST'
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
 const SET_USER_PROFILE = 'SET-USER-PROFILE'
 const SET_USER_STATUS = 'SET_USER_STATUS'
 
@@ -43,7 +42,6 @@ type UserStatusResponseType = {
 export type ProfilePageType = {
     profile: null | ProfileResponseType
     postsData: Array<PostPropsType>
-    newPostText: string
     isAuth: boolean
     status: string
 }
@@ -56,7 +54,6 @@ export type PostPropsType = {
 //тайпсриптовая штучка аналогичная type AddPostActionType = { type: 'ADD-POST'}
 // но позволяющая не писать типизацию 100 раз, а брать её из экшн креэйтеров
 export type AddPostActionType = ReturnType<typeof AddPostActionCreator>
-export type UpdateNewPostTextActionType = ReturnType<typeof UpdateNewPostTextActionCreator>
 export type setUserProfileACActionType = ReturnType<typeof setUserProfile>
 export type setUserStatusActionType = ReturnType<typeof setUserStatus>
 
@@ -69,7 +66,6 @@ const initialState: ProfilePageType = {
         {id: 1, postMessage: 'Hi! It\'s my first post', likesCount: 3},
         {id: 2, postMessage: 'Yo!', likesCount: 12}
     ],
-    newPostText: '',
     isAuth: false,
     status: ''
 }
@@ -79,20 +75,12 @@ const profileReducer = (state: ProfilePageType = initialState, action: ActionTyp
         case ADD_POST: {
             let newPost: PostPropsType = {
                 id: 3,
-                postMessage: state.newPostText,
+                postMessage: action.newPostText,
                 likesCount: 0
             }
             let stateCopy = {
                 ...state,
                 postsData: [...state.postsData, newPost],
-                newPostText: ''
-            }
-            return stateCopy;
-        }
-        case UPDATE_NEW_POST_TEXT: {
-            let stateCopy = {
-                ...state,
-                newPostText: action.newPostText
             }
             return stateCopy;
         }
@@ -117,14 +105,8 @@ const profileReducer = (state: ProfilePageType = initialState, action: ActionTyp
 }
 
 
-export const AddPostActionCreator = () => ({
-    type: ADD_POST
-}) as const
-
-
-export const UpdateNewPostTextActionCreator = (text: string) => ({
-    type: 'UPDATE-NEW-POST-TEXT',
-    newPostText: text
+export const AddPostActionCreator = (newPostText: string) => ({
+    type: ADD_POST, newPostText
 }) as const
 
 const setUserProfile = (profile: ProfileResponseType) => ({

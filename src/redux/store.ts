@@ -1,5 +1,5 @@
-import profileReducer, {AddPostActionType,  UpdateNewPostTextActionType} from './profile-reducer'
-import dialogsReducer, { SendMessageActionType, UpdateNewMessageBodyTextActionType} from './dialogs-reducer';
+import profileReducer, {AddPostActionType} from './profile-reducer'
+import dialogsReducer, { SendMessageActionType} from './dialogs-reducer';
 
 type PostPropsType = {
     id: number
@@ -30,7 +30,7 @@ type StatePropsType = {
     dialogsPage: DialogsPageType
 }
 
-type  ActionTypes = AddPostActionType | UpdateNewPostTextActionType | UpdateNewMessageBodyTextActionType | SendMessageActionType
+type  ActionTypes = AddPostActionType | SendMessageActionType
 
  type StoreType = {
     _state: StatePropsType
