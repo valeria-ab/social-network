@@ -5,7 +5,7 @@ import {AxiosResponse} from "axios";
 
 const SET_USER_DATA = 'SET_USER_DATA';
 
- type initialAuthState = {
+export type initialAuthState = {
     userId: null | number,
     email: null | string,
     login: null | string,
@@ -26,7 +26,7 @@ type AuthResponse = {
     messages: Array<string>
 }
 
-const initialState: initialAuthState = {
+ const initialState: initialAuthState = {
     userId: null,
     email: null,
     login: null,
@@ -39,8 +39,7 @@ const authReducer = (state = initialState, action: ActionTypes):initialAuthState
 
             return {
                 ...state,
-                ...action.data,
-                isAuth: true
+                ...action.payload
             }
 
         default:
@@ -48,8 +47,8 @@ const authReducer = (state = initialState, action: ActionTypes):initialAuthState
     }
 }
 
-const setAuthUserData = (userId:number, email:string, login:string) => ({
-    type: SET_USER_DATA, data: {userId, email, login}
+const setAuthUserData = (userId:number, email:string, login:string, isAuth: boolean) => ({
+    type: SET_USER_DATA, payload: {userId, email, login, isAuth}
 }) as const
 
 export const getAuthUserData = () => (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
@@ -57,7 +56,26 @@ export const getAuthUserData = () => (dispatch: Dispatch<ActionTypes>, getState:
     authAPI.me().then((response: AxiosResponse<AuthResponse>) => {
         if (response.data.resultCode === 0) {
             let {id, email, login} = response.data.data
-            dispatch(setAuthUserData(id, email, login))
+            dispatch(setAuthUserData(id, email, login, true))
+        }
+    })
+}
+
+export const login = (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+
+    authAPI.login(email, password, rememberMe).then((response: AxiosResponse<AuthResponse>) => {
+        if (response.data.resultCode === 0) {
+            // @ts-ignore
+            dispatch(getAuthUserData())
+        }
+    })
+}
+
+export const logout = () => (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+
+    authAPI.logout().then((response: AxiosResponse<AuthResponse>) => {
+        if (response.data.resultCode === 0) {
+            console.log("dispatch(setAuthUserData(null, null, null, false))")
         }
     })
 }

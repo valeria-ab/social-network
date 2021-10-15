@@ -11,7 +11,7 @@ import dialogsReducer, {
 } from "./dialogs-reducer";
 import { initialUsersState, UsersPageActionTypes, usersReducer } from "./users-reducer";
 import sidebarReducer from "./sidebar-reducer";
-import authReducer, {setAuthUserDataActionType} from "./auth-reducer";
+import authReducer, {initialAuthState, setAuthUserDataActionType} from "./auth-reducer";
 import { reducer as formReducer } from "redux-form";
 
 export type  ActionTypes = AddPostActionType  |
@@ -23,6 +23,7 @@ export type StatePropsType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
     usersPage:initialUsersState
+    auth: initialAuthState
 }
 
 //редаксовская ф-я смешивающая редюсеры
