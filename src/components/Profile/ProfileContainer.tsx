@@ -14,6 +14,8 @@ type PathParamsType = {
 type MapStateToPropsType = {
     profile: null | ProfileResponseType
     status: string
+    authorizedUserId: number | null
+    isAuth: boolean
 }
 
 type MapDispatchToPropsType = {
@@ -34,7 +36,7 @@ class ProfileContainer extends React.Component<PropsType> {
        let userId = this.props.match.params.userId
 
         if (!userId) {
-            userId = 13755
+            userId = this.props.authorizedUserId
         }
         this.props.getUserProfile(userId)
         this.props.getUserStatus(userId)
@@ -60,7 +62,9 @@ export default connect(mapStateToProps, {getUserProfile})(WithUrlDataContainerCo
 
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
     profile: state.profilePage.profile,
-    status: state.profilePage.status
+    status: state.profilePage.status,
+    authorizedUserId: state.auth.userId,
+    isAuth: state.auth.isAuth
 })
 
 //вызовы идут снизу вверх - ProfileContainer оборачивается withAuthRedirect, то что она вернёт вызывается withRouter и т.д.
