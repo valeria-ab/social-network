@@ -1,6 +1,7 @@
 import profileReducer, {AddPostActionType} from './profile-reducer'
 import dialogsReducer, { SendMessageActionType} from './dialogs-reducer';
 
+
 type PostPropsType = {
     id: number
     postMessage: string
@@ -30,7 +31,7 @@ type StatePropsType = {
     dialogsPage: DialogsPageType
 }
 
-type  ActionTypes = AddPostActionType | SendMessageActionType
+type  ActionTypes = AddPostActionType | SendMessageActionType 
 
  type StoreType = {
     _state: StatePropsType

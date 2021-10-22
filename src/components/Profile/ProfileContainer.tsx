@@ -8,7 +8,7 @@ import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 
 type PathParamsType = {
-    userId: number
+    userId: number | null
 }
 
 type MapStateToPropsType = {
@@ -19,8 +19,8 @@ type MapStateToPropsType = {
 }
 
 type MapDispatchToPropsType = {
-    getUserProfile: (userId: number) => void
-    getUserStatus: (userId: number) => void
+    getUserProfile: (userId: number| null) => void
+    getUserStatus: (userId: number | null) => void
     updateUserStatus: (status: string) => void
 }
 
@@ -33,7 +33,7 @@ type PropsType = RouteComponentProps<PathParamsType> & ProfileContainerPropsType
 class ProfileContainer extends React.Component<PropsType> {
 
     componentDidMount() {
-       let userId = this.props.match.params.userId
+       let userId  = this.props.match.params.userId
 
         if (!userId) {
             userId = this.props.authorizedUserId

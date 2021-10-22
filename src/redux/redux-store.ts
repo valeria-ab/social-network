@@ -12,11 +12,11 @@ import dialogsReducer, {
 import { initialUsersState, UsersPageActionTypes, usersReducer } from "./users-reducer";
 import sidebarReducer from "./sidebar-reducer";
 import authReducer, {initialAuthState, setAuthUserDataActionType} from "./auth-reducer";
-import { reducer as formReducer } from "redux-form";
+import { FormAction, reducer as formReducer } from "redux-form";
 
 export type  ActionTypes = AddPostActionType  |
     SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType | setAuthUserDataActionType |
-    setUserStatusActionType
+    setUserStatusActionType | FormAction
 
 
 export type StatePropsType = {

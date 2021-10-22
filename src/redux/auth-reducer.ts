@@ -40,7 +40,7 @@ const authReducer = (state = initialState, action: ActionTypes):initialAuthState
 
             return {
                 ...state,
-                ...action.payload
+                action.payload
             }
 
         default:
