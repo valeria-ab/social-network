@@ -45,7 +45,7 @@ const initialState = {
 
 export type initialUsersState = typeof initialState;
 
-export const usersReducer = (state = initialState, action: ActionTypes):initialUsersState => {
+export const usersReducer = (state = initialState, action: any):initialUsersState => {
 
     switch (action.type) {
         case FOLLOW:

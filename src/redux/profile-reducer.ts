@@ -39,13 +39,8 @@ type UserStatusResponseType = {
     response: string
 }
 
-export type ProfilePageType = {
-    profile: null | ProfileResponseType
-    postsData: Array<PostPropsType>
-    isAuth: boolean
-    status: string
-}
-export type PostPropsType = {
+
+export type PostType = {
     id: number
     postMessage: string
     likesCount: number
@@ -60,20 +55,22 @@ export type setUserStatusActionType = ReturnType<typeof setUserStatus>
 type ProfileResponse = {}
 
 
-const initialState: ProfilePageType = {
-    profile: null,
+const initialState = {
+    profile: null as ProfileResponseType | null, 
     postsData: [
         {id: 1, postMessage: 'Hi! It\'s my first post', likesCount: 3},
         {id: 2, postMessage: 'Yo!', likesCount: 12}
-    ],
+    ] as Array<PostType>,
     isAuth: false,
     status: ''
 }
 
-const profileReducer = (state: ProfilePageType = initialState, action: ActionTypes): ProfilePageType => {
+export type ProfilePageType = typeof initialState;
+
+const profileReducer = (state = initialState, action: any): ProfilePageType => {
     switch (action.type) {
         case ADD_POST: {
-            let newPost: PostPropsType = {
+            let newPost = {
                 id: 3,
                 postMessage: action.newPostText,
                 likesCount: 0

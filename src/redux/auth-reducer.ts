@@ -1,46 +1,27 @@
-import {Dispatch} from "redux";
-import {ActionTypes, AppStateType} from "./redux-store";
-import {authAPI} from "../api/api";
-import {AxiosResponse} from "axios";
-import {stopSubmit} from "redux-form";
+import { Dispatch } from "redux";
+import { ActionTypes, AppStateType } from "./redux-store";
+import { authAPI } from "../api/api";
+import { AxiosResponse } from "axios";
+import { stopSubmit } from "redux-form";
 
 const SET_USER_DATA = 'SET_USER_DATA';
+//export type setAuthUserDataActionType = ReturnType<typeof setAuthUserData>
 
-export type initialAuthState = {
-    userId: null | number,
-    email: null | string,
-    login: null | string,
-    isAuth: boolean
-}
 
-export type setAuthUserDataActionType = ReturnType<typeof setAuthUserData>
-
-type AuthResponseData = {
-    id: number
-    email: string
-    login: string
-}
-
-type AuthResponse = {
-    data: AuthResponseData
-    resultCode: number
-    messages: Array<string>
-}
-
- const initialState: initialAuthState = {
-    userId: null,
-    email: null,
-    login: null,
+const initialState = {
+    userId: null as (number | null),
+    email: null as string | null,
+    login: null as string | null,
     isAuth: false
 };
 
-const authReducer = (state = initialState, action: ActionTypes):initialAuthState => {
+const authReducer = (state = initialState, action: any): initialAuthState => {
     switch (action.type) {
         case SET_USER_DATA:
 
             return {
                 ...state,
-                action.payload
+                ...action.payload
             }
 
         default:
@@ -48,15 +29,27 @@ const authReducer = (state = initialState, action: ActionTypes):initialAuthState
     }
 }
 
-const setAuthUserData = (userId:number, email:string, login:string, isAuth: boolean) => ({
-    type: SET_USER_DATA, payload: {userId, email, login, isAuth}
-}) as const
+type SetAuthUserDataActionPayloadType = {
+    userId: number | null,
+    email: string | null,
+    login: string | null,
+    isAuth: boolean
+}
+export type SetAuthUserDataActionType = {
+    type: typeof SET_USER_DATA,
+    payload: SetAuthUserDataActionPayloadType
+}
+export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean): SetAuthUserDataActionType => ({
+    type: SET_USER_DATA, payload:
+        {userId, email, login, isAuth}
+});
+
 
 export const getAuthUserData = () => (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
 
-    authAPI.me().then((response: AxiosResponse<AuthResponse>) => {
+    authAPI.me().then((response: AxiosResponse<any>) => {
         if (response.data.resultCode === 0) {
-            let {id, email, login} = response.data.data
+            let { id, email, login } = response.data.data
             dispatch(setAuthUserData(id, email, login, true))
         }
     })
@@ -64,13 +57,13 @@ export const getAuthUserData = () => (dispatch: Dispatch<ActionTypes>, getState:
 
 export const login = (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
 
-    authAPI.login(email, password, rememberMe).then((response: AxiosResponse<AuthResponse>) => {
+    authAPI.login(email, password, rememberMe).then((response: AxiosResponse<any>) => {
         if (response.data.resultCode === 0) {
             // @ts-ignore
             dispatch(getAuthUserData())
         } else {
             let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some error"
-            let action = stopSubmit("login", {_error: message})
+            let action = stopSubmit("login", { _error: message })
             dispatch(action)
         }
     })
@@ -78,11 +71,16 @@ export const login = (email: string, password: string, rememberMe: boolean) => (
 
 export const logout = () => (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
 
-    authAPI.logout().then((response: AxiosResponse<AuthResponse>) => {
+    authAPI.logout().then((response: AxiosResponse<any>) => {
         if (response.data.resultCode === 0) {
-            console.log("dispatch(setAuthUserData(null, null, null, false))")
+            console.log(dispatch(setAuthUserData(null, null, null, false)))
         }
     })
 }
 
 export default authReducer;
+
+
+
+
+export type initialAuthState = typeof initialState

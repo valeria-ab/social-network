@@ -11,12 +11,12 @@ import dialogsReducer, {
 } from "./dialogs-reducer";
 import { initialUsersState, UsersPageActionTypes, usersReducer } from "./users-reducer";
 import sidebarReducer from "./sidebar-reducer";
-import authReducer, {initialAuthState, setAuthUserDataActionType} from "./auth-reducer";
+import authReducer, {initialAuthState, SetAuthUserDataActionType} from "./auth-reducer";
 import { FormAction, reducer as formReducer } from "redux-form";
 
 export type  ActionTypes = AddPostActionType  |
-    SendMessageActionType  | UsersPageActionTypes | setUserProfileACActionType | setAuthUserDataActionType |
-    setUserStatusActionType | FormAction
+    SendMessageActionType   | UsersPageActionTypes | setUserProfileACActionType | SetAuthUserDataActionType |
+    setUserStatusActionType | FormAction 
 
 
 export type StatePropsType = {
@@ -41,6 +41,8 @@ const rootReducer = combineReducers({
 
 //typeof rootReducer - это типизация функции, а ф-я что-то возвращает; и мы говорим дай мне возвращаемый тип
 export type AppStateType = ReturnType<typeof rootReducer>
+
+//export type InferActionsTypes<T> = T extends { [keys: string]: (...args: any[]) => infer U } ? U : never
 
 //автоматически createStore создаёт внутри себя стэйт у которого есть свойства описанные в reducers
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))

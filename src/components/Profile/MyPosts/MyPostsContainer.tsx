@@ -1,13 +1,13 @@
 import React from 'react';
 import MyPosts from "./MyPosts";
 import {connect} from "react-redux";
-import {AddPostActionCreator, PostPropsType} from "../../../redux/profile-reducer";
+import {AddPostActionCreator, PostType} from "../../../redux/profile-reducer";
 import {AppStateType} from "../../../redux/redux-store";
 import {Dispatch} from "redux";
 
 //нужно типизировать то что mapStateToProps возвращает
 type MapStateToPropsType = {
-    postsData: Array<PostPropsType>
+    postsData: Array<PostType>
 }
 type MapDispatchToPropsType = {
     addPost: (newPostText: string) => void
