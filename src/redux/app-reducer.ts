@@ -5,15 +5,15 @@ import { authAPI } from "../api/api";
 import { AxiosResponse } from "axios";
 import { stopSubmit } from "redux-form";
 
+
 const INITIALIZED_SUCCSESS = 'INITIALIZED_SUCCSESS';
 
-
-
+export type InitialAppStateType = typeof initialState
 const initialState = {
     initialized: false
 };
 
-export const appReducer = (state = initialState, action: any): initialAppState => {
+export const appReducer = (state = initialState, action: any): InitialAppStateType => {
     switch (action.type) {
         case INITIALIZED_SUCCSESS:
 
@@ -28,11 +28,11 @@ export const appReducer = (state = initialState, action: any): initialAppState =
 }
 
 
-export type initializedSuccessActionType = {
+export type InitializedSuccessActionType = {
     type: typeof INITIALIZED_SUCCSESS,
 
 }
-export const initializedSuccess = (): initializedSuccessActionType => ({ type: INITIALIZED_SUCCSESS });
+export const initializedSuccess = (): InitializedSuccessActionType => ({ type: INITIALIZED_SUCCSESS });
 
 
 export const initializeApp = () => (dispatch: Dispatch<any>, getState: () => AppStateType) => {
@@ -47,4 +47,3 @@ export const initializeApp = () => (dispatch: Dispatch<any>, getState: () => App
 }
 
 
-export type initialAppState = typeof initialState
