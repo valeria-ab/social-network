@@ -99,5 +99,5 @@ export default connect(mapStateToProps, {
 
 export default compose<React.ComponentType>(
     connect(mapStateToProps, {setCurrentPage, getUsers, follow, unfollow}),
-    withAuthRedirect
+    //withAuthRedirect
 )(UsersContainer)

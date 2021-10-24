@@ -47,7 +47,7 @@ export const setAuthUserData = (userId: number | null, email: string | null, log
 
 export const getAuthUserData = () => (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
 
-    authAPI.me().then((response: AxiosResponse<any>) => {
+    return authAPI.me().then((response: AxiosResponse<any>) => {
         if (response.data.resultCode === 0) {
             let { id, email, login } = response.data.data
             dispatch(setAuthUserData(id, email, login, true))

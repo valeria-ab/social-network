@@ -1,3 +1,4 @@
+import { appReducer, initialAppState } from './app-reducer';
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunkMiddleware from "redux-thunk";
 import profileReducer, {
@@ -24,6 +25,7 @@ export type StatePropsType = {
     dialogsPage: DialogsPageType
     usersPage:initialUsersState
     auth: initialAuthState
+    app: initialAppState
 }
 
 //редаксовская ф-я смешивающая редюсеры
@@ -33,7 +35,8 @@ const rootReducer = combineReducers({
     sidebar: sidebarReducer,
     usersPage: usersReducer,
     auth: authReducer,
-    form: formReducer
+    form: formReducer,
+    app: appReducer
 })
 
 
