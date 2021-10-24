@@ -1,9 +1,10 @@
 import React from 'react';
 import MyPosts from "./MyPosts";
 import {connect} from "react-redux";
-import {AddPostActionCreator, PostType} from "../../../redux/profile-reducer";
+import {AddPostActionCreator} from "../../../redux/profile-reducer";
 import {AppStateType} from "../../../redux/redux-store";
 import {Dispatch} from "redux";
+import { PostType } from '../../../types/types';
 
 //нужно типизировать то что mapStateToProps возвращает
 type MapStateToPropsType = {

@@ -4,14 +4,13 @@ import {connect} from "react-redux";
 import {
     follow,
     getUsers,
-    setCurrentPage, unfollow,
-    UserType
+    setCurrentPage, unfollow
 } from "../../redux/users-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import Users from "./Users";
 import Preloader from "../../common/Preloader/Preloader";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
+import { UserType } from '../../types/types';
 
 
 

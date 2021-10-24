@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './ProfileInfo.module.css'
-import {ProfileResponseType} from "../../../redux/profile-reducer";
 import Preloader from "../../../common/Preloader/Preloader";
 import {ProfileStatus} from "./ProfileStatus";
+import { ProfileResponseType } from '../../../types/types';
 
 type ProfileInfoPropsType = {
     profile: null | ProfileResponseType

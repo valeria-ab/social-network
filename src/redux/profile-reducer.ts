@@ -3,56 +3,20 @@ import {Dispatch} from "redux";
 import {profileAPI, usersAPI} from "../api/api";
 import {ThunkAction} from "redux-thunk";
 import {AxiosResponse} from "axios";
+import { PostType, ProfilePhotosType, ProfileResponseType } from "../types/types";
 
 const ADD_POST = 'ADD-POST'
 const SET_USER_PROFILE = 'SET-USER-PROFILE'
 const SET_USER_STATUS = 'SET_USER_STATUS'
 
-type ProfilePhotosType = {
-    small: string
-    large: string
-}
 
-type ProfileContactsType = {
-    facebook: string
-    website: null
-    vk: string
-    twitter: string
-    instagram: string
-    youtube: null
-    github: string
-    mainLink: null
-}
-
-export type ProfileResponseType = {
-    aboutMe: string
-    contacts: ProfileContactsType
-    lookingForAJob: true
-    lookingForAJobDescription: string
-    fullName: string
-    userId: number
-    photos: ProfilePhotosType
-    resultCode: number
-}
-
-type UserStatusResponseType = {
-    response: string
-}
-
-
-export type PostType = {
-    id: number
-    postMessage: string
-    likesCount: number
-}
 
 //тайпсриптовая штучка аналогичная type AddPostActionType = { type: 'ADD-POST'}
 // но позволяющая не писать типизацию 100 раз, а брать её из экшн креэйтеров
 export type AddPostActionType = ReturnType<typeof AddPostActionCreator>
-export type setUserProfileACActionType = ReturnType<typeof setUserProfile>
-export type setUserStatusActionType = ReturnType<typeof setUserStatus>
+export type SetUserProfileACActionType = ReturnType<typeof setUserProfile>
+export type SetUserStatusActionType = ReturnType<typeof setUserStatus>
 
-type ProfileResponse = {}
 
 
 const initialState = {
@@ -75,11 +39,10 @@ const profileReducer = (state = initialState, action: any): ProfilePageType => {
                 postMessage: action.newPostText,
                 likesCount: 0
             }
-            let stateCopy = {
+            return {
                 ...state,
                 postsData: [...state.postsData, newPost],
-            }
-            return stateCopy;
+            };
         }
 
         case SET_USER_PROFILE: {

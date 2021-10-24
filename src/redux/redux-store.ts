@@ -4,26 +4,26 @@ import thunkMiddleware from "redux-thunk";
 import profileReducer, {
     AddPostActionType,
     ProfilePageType,
-    setUserProfileACActionType, setUserStatusActionType
+    SetUserProfileACActionType, SetUserStatusActionType
 } from "./profile-reducer";
 import dialogsReducer, {
     DialogsPageType,
     SendMessageActionType
 } from "./dialogs-reducer";
-import { initialUsersState, UsersPageActionTypes, usersReducer } from "./users-reducer";
+import { InitialUsersState, UsersPageActionTypes, usersReducer } from "./users-reducer";
 import sidebarReducer from "./sidebar-reducer";
 import authReducer, {initialAuthState, SetAuthUserDataActionType} from "./auth-reducer";
 import { FormAction, reducer as formReducer } from "redux-form";
 
 export type  ActionTypes = AddPostActionType  |
-    SendMessageActionType   | UsersPageActionTypes | setUserProfileACActionType | SetAuthUserDataActionType |
-    setUserStatusActionType | FormAction 
+    SendMessageActionType   | UsersPageActionTypes | SetUserProfileACActionType | SetAuthUserDataActionType |
+    SetUserStatusActionType | FormAction 
 
 
 export type StatePropsType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
-    usersPage:initialUsersState
+    usersPage: InitialUsersState
     auth: initialAuthState
     app: InitialAppStateType
 }
