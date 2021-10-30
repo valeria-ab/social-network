@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ProfileInfo.module.css'
 import Preloader from "../../../common/Preloader/Preloader";
-import {ProfileStatus} from "./ProfileStatus";
+import {ProfileStatusWithHooks} from "./ProfileStatusWithHooks";
 import { ProfileResponseType } from '../../../types/types';
 
 type ProfileInfoPropsType = {
@@ -19,7 +19,7 @@ function ProfileInfo(props:ProfileInfoPropsType) {
             <div>
                 <img src={props.profile.photos.large}/>
                 <h2>Full Name: {props.profile.fullName}</h2>
-                <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
+                <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus}/>
                 <div>Status: {props.profile.aboutMe}</div>
                 <div>Looking For a Job: {
                     props.profile.lookingForAJob
