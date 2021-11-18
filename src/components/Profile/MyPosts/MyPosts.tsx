@@ -14,7 +14,7 @@ type MypostsPropsType = {
 
 const maxLength10 = maxLengthCreator(10)
 
-const MyPosts = (props: MypostsPropsType) => {
+const MyPosts = React.memo((props: MypostsPropsType) => {
 
     let onAddPost = (values: any) => {
         debugger
@@ -39,7 +39,7 @@ const MyPosts = (props: MypostsPropsType) => {
         </div>
 
     )
-}
+})
 
 const AddNewPostForm = (props: any) => {
     return (
