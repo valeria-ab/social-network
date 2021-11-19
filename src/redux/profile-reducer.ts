@@ -6,6 +6,7 @@ import {AxiosResponse} from "axios";
 import { PostType, ProfilePhotosType, ProfileResponseType } from "../types/types";
 
 const ADD_POST = 'ADD-POST'
+const DELETE_POST = 'DELETE-POST'
 const SET_USER_PROFILE = 'SET-USER-PROFILE'
 const SET_USER_STATUS = 'SET_USER_STATUS'
 
@@ -22,8 +23,8 @@ export type SetUserStatusActionType = ReturnType<typeof setUserStatus>
 const initialState = {
     profile: null as ProfileResponseType | null, 
     postsData: [
-        {id: 1, postMessage: 'Hi! It\'s my first post', likesCount: 3},
-        {id: 2, postMessage: 'Yo!', likesCount: 12}
+        {id: "1", postMessage: 'Hi! It\'s my first post', likesCount: 3},
+        {id: "2", postMessage: 'Yo!', likesCount: 12}
     ] as Array<PostType>,
     isAuth: false,
     status: ''
@@ -35,13 +36,21 @@ const profileReducer = (state = initialState, action: any): ProfilePageType => {
     switch (action.type) {
         case ADD_POST: {
             let newPost = {
-                id: 3,
+                id: "3",
                 postMessage: action.newPostText,
                 likesCount: 0
             }
             return {
                 ...state,
                 postsData: [...state.postsData, newPost],
+            };
+        }
+
+        case DELETE_POST: {
+            
+            return {
+                ...state,
+                postsData: state.postsData.filter(p => p.id !== action.postId),
             };
         }
 
@@ -67,6 +76,9 @@ const profileReducer = (state = initialState, action: any): ProfilePageType => {
 
 export const AddPostActionCreator = (newPostText: string) => ({
     type: ADD_POST, newPostText
+}) as const
+export const DeletePostActionCreator = (postTd: string) => ({
+    type: DELETE_POST, postTd
 }) as const
 
 const setUserProfile = (profile: ProfileResponseType) => ({

@@ -42,5 +42,4 @@ it("after deleting length of messages should be decremented", () => {
 
   // 3. expectation
   expect(newState.postsData.length).toBe(2);
-  
 });
