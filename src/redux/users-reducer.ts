@@ -165,6 +165,7 @@ export const follow = (userId: number): ThunkType => {
       usersAPI.followUser.bind(usersAPI),
       followSuccess
     );
+ 
   };
 };
 
@@ -179,5 +180,6 @@ export const unfollow = (userId: number): ThunkType => {
       usersAPI.unfollowUser.bind(usersAPI),
       unfollowSuccess
     );
+ 
   };
 };

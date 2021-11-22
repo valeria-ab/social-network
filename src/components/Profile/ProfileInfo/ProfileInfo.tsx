@@ -10,23 +10,23 @@ type ProfileInfoPropsType = {
     updateStatus: (status: string) => void
 }
 
-function ProfileInfo(props:ProfileInfoPropsType) {
-    if(!props.profile) {
+function ProfileInfo({profile, status, updateStatus}:ProfileInfoPropsType) {
+    if(!profile) {
         return <Preloader />
     }
     return (
         <div>
             <div>
-                <img src={props.profile.photos.large}/>
-                <h2>Full Name: {props.profile.fullName}</h2>
-                <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus}/>
-                <div>Status: {props.profile.aboutMe}</div>
+                <img src={profile.photos.large}/>
+                <h2>Full Name: |{profile.fullName}</h2>
+                <ProfileStatusWithHooks status={status} updateStatus={updateStatus}/>
+                <div>Status: {profile.aboutMe}</div>
                 <div>Looking For a Job: {
-                    props.profile.lookingForAJob
+                    profile.lookingForAJob
                         ?<span>✅</span>
                         :<span>❌</span>
                 }</div>
-                <div>Description: {props.profile.lookingForAJobDescription}</div>
+                <div>Description: {profile.lookingForAJobDescription}</div>
             </div>
 
         </div>

@@ -1,17 +1,17 @@
 import React from 'react';
-import './App.css';
-import Navbar from './components/Navbar/Navbar';
+import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import './App.css';
+import Preloader from './common/Preloader/Preloader';
 import { DialogsContainer } from './components/Dialogs/DialogsContainer';
-import UsersContainer from "./components/Users/UsersContainer";
-import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
-import { connect } from 'react-redux';
-import {initializeApp} from "./redux/app-reducer";
-import { compose } from 'redux';
+import Navbar from './components/Navbar/Navbar';
+import ProfileContainer from "./components/Profile/ProfileContainer";
+import UsersContainer from "./components/Users/UsersContainer";
+import { initializeApp } from "./redux/app-reducer";
 import { AppStateType } from './redux/redux-store';
-import Preloader from './common/Preloader/Preloader';
 
 
 type MapStateToPropsType = {
