@@ -34,8 +34,10 @@ export const DialogsContainer = connect(mapStateToProps,{
 
 
 
-export const DialogsContainer = compose<ComponentType>(
+ const DialogsContainer = compose<ComponentType>(
     connect(mapStateToProps,{
         sendMessage}),
     withAuthRedirect
 )(Dialogs)
+
+export default DialogsContainer;
