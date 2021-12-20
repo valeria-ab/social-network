@@ -5,16 +5,18 @@ import { ProfileResponseType } from '../../types/types';
 
 
 type ProfilePropsType = {
+    isOwner:boolean
     profile: null | ProfileResponseType
     status: string
     updateStatus: (status: string) => void
+    savePhoto: Function
 }
 
 
 function  Profile(props: ProfilePropsType) {
     return (
         <div>
-           <ProfileInfo profile={props.profile}  status={props.status} updateStatus={props.updateStatus}/>
+           <ProfileInfo savePhoto={props.savePhoto} isOwner={props.isOwner} profile={props.profile}  status={props.status} updateStatus={props.updateStatus}/>
           <MyPostsContainer />
         </div>
     )

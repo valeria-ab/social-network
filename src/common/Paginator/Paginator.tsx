@@ -70,3 +70,18 @@ const Paginator = ({
   );
 };
 export default Paginator;
+
+
+// return (
+//   <span
+//     className={ cn({
+//       [styles.selectedPage] : currentPage === p }, styles.pageNumber)}
+//       key={p}
+     
+//     onClick={(e) => {
+//       onPageChanged(p);
+//     }}
+//   >
+//     {" "}
+//     {p}{" "}
+//   </span>

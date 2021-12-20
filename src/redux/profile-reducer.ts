@@ -8,6 +8,7 @@ import {
   ProfilePhotosType,
   ProfileResponseType,
 } from "../types/types";
+import { profile } from "console";
 
 const ADD_POST = "ADD-POST";
 const DELETE_POST = "DELETE-POST";
@@ -66,6 +67,13 @@ const profileReducer = (state = initialState, action: any): ProfilePageType => {
         status: action.status,
       };
     }
+    case "SAVE_PHOTO_SUCCESS": {
+      return {
+        ...state,
+        //@ts-ignore
+        profile: { ...state.profile, photos: action.photos },
+      };
+    }
 
     default:
       return state;
@@ -95,6 +103,12 @@ const setUserStatus = (status: string) =>
     status,
   } as const);
 
+const savePhotoSuccess = (photos: ProfilePhotosType) =>
+  ({
+    type: "SAVE_PHOTO_SUCCESS",
+    photos,
+  } as const);
+
 type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>;
 
 export const getUserProfile =
@@ -108,21 +122,28 @@ export const getUserProfile =
 export const getUserStatus =
   (userId: number): ThunkType =>
   async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
-    const response = await profileAPI.getStatus(userId)
-    
-      dispatch(setUserStatus(response.data));
+    const response = await profileAPI.getStatus(userId);
 
+    dispatch(setUserStatus(response.data));
   };
 
 export const updateUserStatus =
   (status: string): ThunkType =>
   async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
-    const response = await profileAPI.updateStatus(status)
-      
-        if (response.data.resultCode === 0) {
-          dispatch(setUserStatus(status));
-        }
+    const response = await profileAPI.updateStatus(status);
 
+    if (response.data.resultCode === 0) {
+      dispatch(setUserStatus(status));
+    }
   };
 
+export const savePhoto =
+  (file: any): ThunkType =>
+  async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+    const response = await profileAPI.savePhoto(file);
+
+    if (response.data.resultCode === 0) {
+      dispatch(savePhotoSuccess(response.data.photos));
+    }
+  };
 export default profileReducer;
