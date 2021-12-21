@@ -67,13 +67,13 @@ const profileReducer = (state = initialState, action: any): ProfilePageType => {
         status: action.status,
       };
     }
-    case "SAVE_PHOTO_SUCCESS": {
+    case "SAVE_PHOTO_SUCCESS": 
       return {
         ...state,
         //@ts-ignore
         profile: { ...state.profile, photos: action.photos },
       };
-    }
+    
 
     default:
       return state;
@@ -143,7 +143,8 @@ export const savePhoto =
     const response = await profileAPI.savePhoto(file);
 
     if (response.data.resultCode === 0) {
-      dispatch(savePhotoSuccess(response.data.photos));
+      dispatch(savePhotoSuccess(response.data.data.photos));
     }
   };
+ 
 export default profileReducer;
