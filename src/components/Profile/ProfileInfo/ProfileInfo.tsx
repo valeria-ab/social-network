@@ -1,25 +1,27 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import s from "./ProfileInfo.module.css";
 import Preloader from "../../../common/Preloader/Preloader";
 import { ProfileStatusWithHooks } from "./ProfileStatusWithHooks";
-import { ProfileResponseType } from "../../../types/types";
+import { ProfileType, ProfileContactsType } from "../../../types/types";
 import { ProfileDataFormReduxForm } from "./ProfileDataForm";
 
-type ProfileInfoPropsType = {
+type PropsType = {
   isOwner: boolean;
-  profile: null | ProfileResponseType;
+  profile: null | ProfileType;
   status: string;
   updateStatus: (status: string) => void;
-  savePhoto: Function;
+  savePhoto: (file: File) => void;
+  saveProfile: (profile: ProfileType) => Promise<any>;
 };
 
-function ProfileInfo({
+const ProfileInfo: React.FC<PropsType> = ({
   profile,
   status,
   isOwner,
   savePhoto,
   updateStatus,
-}: ProfileInfoPropsType) {
+  saveProfile,
+}) => {
   const [editMode, setEditMode] = useState(false);
 
   const userPhoto =
@@ -29,25 +31,29 @@ function ProfileInfo({
     return <Preloader />;
   }
 
-  const onMainPhotoSelected = (e: any) => {
+  const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       savePhoto(e.target.files[0]);
     }
   };
 
-  const onSubmit = (formData: any) => {
-    alert(formData);
+  const onSubmit = (formData: ProfileType) => {
+    saveProfile(formData);
+    setEditMode(false);
   };
   return (
     <div>
       <div className={s.descriptionBlock}>
-        <h2>Full Name: {profile.fullName}</h2>
-        <ProfileStatusWithHooks status={status} updateStatus={updateStatus} />
         <img src={profile.photos.large || userPhoto} />
         {isOwner && <input type={"file"} onChange={onMainPhotoSelected} />}
+
+        <ProfileStatusWithHooks status={status} updateStatus={updateStatus} />
         {editMode ? (
-          //@ts-ignore
-          <ProfileDataFormReduxForm  handleSubmit={onSubmit} />
+          <ProfileDataFormReduxForm
+            initialValues={profile}
+            onSubmit={onSubmit}
+            profile={profile}
+          />
         ) : (
           <ProfileData
             profile={profile}
@@ -58,20 +64,27 @@ function ProfileInfo({
       </div>
     </div>
   );
-}
+};
 
 type ProfileDataType = {
-  profile: null | ProfileResponseType;
+  profile: ProfileType;
   isOwner: boolean;
   goToEditMode: () => void;
 };
-const ProfileData = ({ profile, isOwner, goToEditMode }: ProfileDataType) => {
+const ProfileData: React.FC<ProfileDataType> = ({
+  profile,
+  isOwner,
+  goToEditMode,
+}: ProfileDataType) => {
   if (!profile) {
     return <Preloader />;
   }
   return (
     <div>
       {isOwner && <button onClick={goToEditMode}>Edit</button>}
+      <div>
+        <h2>Full Name: {profile.fullName}</h2>
+      </div>
       <div>
         <b>About me:</b> {profile.aboutMe}
       </div>
@@ -89,28 +102,31 @@ const ProfileData = ({ profile, isOwner, goToEditMode }: ProfileDataType) => {
       </div>
       <div>
         <b>Contacts: </b>{" "}
-        {Object.keys(profile.contacts).map((key) => (
-          <Contact
-            key={key}
-            contactTitle={key}
-            //@ts-ignore
-            contactValue={profile.contacts[key]}
-          />
-        ))}
+        {Object.keys(profile.contacts).map((key) => {
+          return (
+            <Contact
+              key={key}
+              contactTitle={key}
+              contactValue={profile.contacts[key as keyof ProfileContactsType]}
+            />
+          );
+        })}
       </div>
     </div>
   );
 };
 
-type ContactType = {
+type ContactsPropsType = {
   contactTitle: string;
-  contactValue: any;
+  contactValue: string;
 };
-const Contact = (props: ContactType) => {
+const Contact: React.FC<ContactsPropsType> = ({
+  contactTitle,
+  contactValue,
+}) => {
   return (
     <div className={s.contact}>
-      <b>{props.contactTitle} </b>
-      {props.contactValue}
+      <b>{contactTitle}</b>: {contactValue}
     </div>
   );
 };

@@ -1,32 +1,42 @@
-import { reduxForm } from "redux-form";
+import { FormEventHandler } from "react";
+import { InjectedFormProps, reduxForm } from "redux-form";
 import {
   createField,
+  GetStringKeys,
   Input,
   Textarea,
 } from "../../../common/FormsControls/FormsControls";
-import Preloader from "../../../common/Preloader/Preloader";
-import { ProfileResponseType } from "../../../types/types";
+import { ProfileType } from "../../../types/types";
+import s from "./ProfileInfo.module.css";
+import style from "../../../common/FormsControls/FormsControls.module.css";
 
-type ProfileDataFormType = {
-  profile: any;
-  handleSubmit: any;
+type PropsType = {
+  profile: ProfileType;
 };
-const ProfileDataForm = (props: any) => {
-  //посмотри как сделан компонент Login
+type ProfileTypeKeys = GetStringKeys<ProfileType>;
+
+const ProfileDataForm: React.FC<
+  InjectedFormProps<ProfileType, PropsType> & PropsType
+> = ({ handleSubmit, profile, error }) => {
   return (
-    <form onSubmit={props.handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div>
         <button>Save</button>
       </div>
-      <div>
-        <b>About me:</b> {createField("About me", "aboutMe", [], Textarea)}
+      {error && <div className={style.formSummaryError}>
+            {error}
+        </div>
+        }
+        <div>
+        <b>Full name</b>: {createField("Full name", "fullName", [], Input)}
       </div>
       <div>
-        <b> Looking For a Job: </b>{" "}
-        {createField("", "LookingForAJob", [], Input, { type: "checkbox" })}
+        <b>Looking for a job</b>:{" "}
+        {createField("", "lookingForAJob", [], Input, { type: "checkbox" })}
       </div>
+
       <div>
-        <b>My skills: </b>{" "}
+        <b>My professional skills</b>:
         {createField(
           "My professional skills",
           "lookingForAJobDescription",
@@ -34,10 +44,26 @@ const ProfileDataForm = (props: any) => {
           Textarea
         )}
       </div>
+
+      <div>
+        <b>About me</b>:{createField("About me", "aboutMe", [], Textarea)}
+      </div>
+      <div>
+        <b>Contacts</b>:{" "}
+        {Object.keys(profile.contacts).map((key) => {
+          return (
+            <div key={key} className={s.contact}>
+              <b>
+                {key}: {createField(key, "contacts." + key, [], Input)}
+              </b>
+            </div>
+          );
+        })}
+      </div>
     </form>
   );
 };
 
-export const ProfileDataFormReduxForm = reduxForm({ form: "editProfile" })(
-  ProfileDataForm
-);
+export const ProfileDataFormReduxForm = reduxForm<ProfileType, PropsType>({
+  form: "edit-profile",
+})(ProfileDataForm);

@@ -1,36 +1,32 @@
 import { appReducer, InitialAppStateType } from "./app-reducer";
-import { applyMiddleware, combineReducers, compose, createStore } from "redux";
-import thunkMiddleware from "redux-thunk";
-import profileReducer, {
-  AddPostActionType,
-  ProfilePageType,
-  SetUserProfileACActionType,
-  SetUserStatusActionType,
-} from "./profile-reducer";
+import {
+  applyMiddleware,
+  combineReducers,
+  compose,
+  createStore,
+  Action,
+} from "redux";
+import thunkMiddleware, { ThunkAction } from "redux-thunk";
+import profileReducer, { ProfilePageType } from "./profile-reducer";
 import dialogsReducer, {
   DialogsPageType,
   SendMessageActionType,
 } from "./dialogs-reducer";
-import {
-  InitialUsersState,
-  UsersPageActionTypes,
-  usersReducer,
-} from "./users-reducer";
+import { InitialUsersState, usersReducer } from "./users-reducer";
 import sidebarReducer from "./sidebar-reducer";
-import authReducer, {
-  initialAuthState,
-  SetAuthUserDataActionType,
-} from "./auth-reducer";
+import authReducer, { initialAuthState } from "./auth-reducer";
 import { FormAction, reducer as formReducer } from "redux-form";
 
-export type ActionTypes =
-  | AddPostActionType
-  | SendMessageActionType
-  | UsersPageActionTypes
-  | SetUserProfileACActionType
-  | SetAuthUserDataActionType
-  | SetUserStatusActionType
-  | FormAction;
+export type InferActionsTypes<T> = T extends {
+  [keys: string]: (...args: any[]) => infer U;
+}
+  ? U
+  : never;
+
+export type BaseThunkType<
+  A extends Action = Action,
+  R = Promise<void>
+> = ThunkAction<R, AppStateType, unknown, A>;
 
 export type StatePropsType = {
   profilePage: ProfilePageType;

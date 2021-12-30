@@ -30,6 +30,7 @@ const MyPosts = React.memo((props: MypostsPropsType) => {
                 {
                     props.postsData.map(
                         el => <Post
+                        key={el.id}
                             postMessage={el.postMessage}
                             likesCount={el.likesCount}
                         />

@@ -1,11 +1,8 @@
 import { Dispatch } from "redux";
-import { ActionTypes, AppStateType } from "./redux-store";
+import { AppStateType, InferActionsTypes } from "./redux-store";
 import { authAPI } from "../api/api";
 import { AxiosResponse } from "axios";
 import { stopSubmit } from "redux-form";
-
-const SET_USER_DATA = "SET_USER_DATA";
-//export type setAuthUserDataActionType = ReturnType<typeof setAuthUserData>
 
 const initialState = {
   userId: null as number | null,
@@ -14,9 +11,22 @@ const initialState = {
   isAuth: false,
 };
 
+export const actions = {
+  setAuthUserData: (
+    userId: number | null,
+    email: string | null,
+    login: string | null,
+    isAuth: boolean
+  ) =>
+    ({
+      type: "SET_USER_DATA",
+      payload: { userId, email, login, isAuth },
+    } as const),
+};
+
 const authReducer = (state = initialState, action: any): initialAuthState => {
   switch (action.type) {
-    case SET_USER_DATA:
+    case "SET_USER_DATA":
       return {
         ...state,
         ...action.payload,
@@ -27,40 +37,31 @@ const authReducer = (state = initialState, action: any): initialAuthState => {
   }
 };
 
-type SetAuthUserDataActionPayloadType = {
-  userId: number | null;
-  email: string | null;
-  login: string | null;
-  isAuth: boolean;
-};
-export type SetAuthUserDataActionType = {
-  type: typeof SET_USER_DATA;
-  payload: SetAuthUserDataActionPayloadType;
-};
-export const setAuthUserData = (
-  userId: number | null,
-  email: string | null,
-  login: string | null,
-  isAuth: boolean
-): SetAuthUserDataActionType => ({
-  type: SET_USER_DATA,
-  payload: { userId, email, login, isAuth },
-});
+// type SetAuthUserDataActionPayloadType = {
+//   userId: number | null;
+//   email: string | null;
+//   login: string | null;
+//   isAuth: boolean;
+// };
+// export type SetAuthUserDataActionType = {
+//   type: typeof SET_USER_DATA;
+//   payload: SetAuthUserDataActionPayloadType;
+// };
 
 export const getAuthUserData =
   () =>
-  async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+  async (dispatch: Dispatch<ActionsType>, getState: () => AppStateType) => {
     const response = await authAPI.me();
 
     if (response.data.resultCode === 0) {
       let { id, email, login } = response.data.data;
-      dispatch(setAuthUserData(id, email, login, true));
+      dispatch(actions.setAuthUserData(id, email, login, true));
     }
   };
 
 export const login =
   (email: string, password: string, rememberMe: boolean) =>
-  async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+  async (dispatch: Dispatch<ActionsType>, getState: () => AppStateType) => {
     const response = await authAPI.login(email, password, rememberMe);
 
     if (response.data.resultCode === 0) {
@@ -71,21 +72,23 @@ export const login =
         response.data.messages.length > 0
           ? response.data.messages[0]
           : "Some error";
-      let action = stopSubmit("login", { _error: message });
+      const action = stopSubmit("login", { _error: message });
+      //@ts-ignore
       dispatch(action);
     }
   };
 
 export const logout =
   () =>
-  async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+  async (dispatch: Dispatch<ActionsType>, getState: () => AppStateType) => {
     const response = await authAPI.logout();
 
     if (response.data.resultCode === 0) {
-      console.log(dispatch(setAuthUserData(null, null, null, false)));
+      console.log(dispatch(actions.setAuthUserData(null, null, null, false)));
     }
   };
 
 export default authReducer;
 
 export type initialAuthState = typeof initialState;
+type ActionsType = InferActionsTypes<typeof actions>;

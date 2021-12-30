@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ProfileType } from "../types/types";
 
 const instance = axios.create({
   withCredentials: true,
@@ -33,7 +34,7 @@ export const profileAPI = {
   updateStatus(status: string) {
     return instance.put(`profile/status`, { status: status });
   },
-  savePhoto(photoFile: any) {
+  savePhoto(photoFile: File) {
     const formData = new FormData();
     formData.append("image", photoFile);
     return instance.put(`profile/photo`, formData, {
@@ -41,6 +42,9 @@ export const profileAPI = {
         "Content-Type": "multipart/form-data",
       },
     });
+  },
+  saveProfile(profile: ProfileType) {
+    return instance.put<APIResponseType>(`profile`, { profile });
   },
 };
 
@@ -54,4 +58,15 @@ export const authAPI = {
   logout() {
     return instance.delete(`/auth/login`);
   },
+};
+
+export enum ResultCodesEnum {
+  Success = 0,
+  Error = 1,
+}
+
+export type APIResponseType<D = {}, RC = ResultCodesEnum> = {
+  data: D;
+  messages: Array<string>;
+  resultCode: RC;
 };

@@ -1,29 +1,18 @@
-import { ActionTypes, AppStateType } from "./redux-store";
+import { AppStateType } from "./redux-store";
 import { Dispatch } from "redux";
 import { profileAPI, usersAPI } from "../api/api";
 import { ThunkAction } from "redux-thunk";
 import { AxiosResponse } from "axios";
-import {
-  PostType,
-  ProfilePhotosType,
-  ProfileResponseType,
-} from "../types/types";
-import { profile } from "console";
+import { PostType, ProfilePhotosType, ProfileType } from "../types/types";
+import { BaseThunkType, InferActionsTypes } from "./redux-store";
+import { FormAction, stopSubmit } from "redux-form";
 
-const ADD_POST = "ADD-POST";
-const DELETE_POST = "DELETE-POST";
-const SET_USER_PROFILE = "SET-USER-PROFILE";
-const SET_USER_STATUS = "SET_USER_STATUS";
-
-//тайпсриптовая штучка аналогичная type AddPostActionType = { type: 'ADD-POST'}
-// но позволяющая не писать типизацию 100 раз, а брать её из экшн креэйтеров
-export type AddPostActionType = ReturnType<typeof AddPostActionCreator>;
-export type SetUserProfileACActionType = ReturnType<typeof setUserProfile>;
-export type SetUserStatusActionType = ReturnType<typeof setUserStatus>;
+type ActionTypes = InferActionsTypes<typeof actions>;
+type ThunkType = BaseThunkType<ActionTypes | FormAction>;
 
 const initialState = {
-  profile: null as ProfileResponseType | null,
-  postsData: [
+  profile: null as ProfileType | null,
+  posts: [
     { id: "1", postMessage: "Hi! It's my first post", likesCount: 3 },
     { id: "2", postMessage: "Yo!", likesCount: 12 },
   ] as Array<PostType>,
@@ -33,9 +22,23 @@ const initialState = {
 
 export type ProfilePageType = typeof initialState;
 
-const profileReducer = (state = initialState, action: any): ProfilePageType => {
+export const actions = {
+  addPostActionCreator: (newPostText: string) =>
+    ({ type: "ADD-POST", newPostText } as const),
+  setUserProfile: (profile: ProfileType) =>
+    ({ type: "SET_USER_PROFILE", profile } as const),
+  setStatus: (status: string) => ({ type: "SET_STATUS", status } as const),
+  deletePost: (postId: number) => ({ type: "DELETE_POST", postId } as const),
+  savePhotoSuccess: (photos: ProfilePhotosType) =>
+    ({ type: "SAVE_PHOTO_SUCCESS", photos } as const),
+};
+
+const profileReducer = (
+  state = initialState,
+  action: ActionTypes
+): ProfilePageType => {
   switch (action.type) {
-    case ADD_POST: {
+    case "ADD-POST": {
       let newPost = {
         id: "3",
         postMessage: action.newPostText,
@@ -43,80 +46,51 @@ const profileReducer = (state = initialState, action: any): ProfilePageType => {
       };
       return {
         ...state,
-        postsData: [...state.postsData, newPost],
+        posts: [...state.posts, newPost],
       };
     }
 
-    case DELETE_POST: {
+    case "DELETE_POST": {
       return {
         ...state,
-        postsData: state.postsData.filter((p) => p.id !== action.postId),
+        //@ts-ignore
+        posts: state.posts.filter((p) => p.id !== action.postId),
       };
     }
 
-    case SET_USER_PROFILE: {
+    case "SET_USER_PROFILE": {
       return {
         ...state,
         profile: action.profile,
       };
     }
 
-    case SET_USER_STATUS: {
+    case "SET_STATUS": {
       return {
         ...state,
         status: action.status,
       };
     }
-    case "SAVE_PHOTO_SUCCESS": 
+    case "SAVE_PHOTO_SUCCESS":
       return {
         ...state,
         //@ts-ignore
         profile: { ...state.profile, photos: action.photos },
       };
-    
 
     default:
       return state;
   }
 };
 
-export const AddPostActionCreator = (newPostText: string) =>
-  ({
-    type: ADD_POST,
-    newPostText,
-  } as const);
-export const DeletePostActionCreator = (postTd: string) =>
-  ({
-    type: DELETE_POST,
-    postTd,
-  } as const);
-
-const setUserProfile = (profile: ProfileResponseType) =>
-  ({
-    type: SET_USER_PROFILE,
-    profile,
-  } as const);
-
-const setUserStatus = (status: string) =>
-  ({
-    type: SET_USER_STATUS,
-    status,
-  } as const);
-
-const savePhotoSuccess = (photos: ProfilePhotosType) =>
-  ({
-    type: "SAVE_PHOTO_SUCCESS",
-    photos,
-  } as const);
-
-type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>;
+//type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>;
 
 export const getUserProfile =
   (userId: number): ThunkType =>
   async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
     const response = await profileAPI.getProfile(userId);
 
-    dispatch(setUserProfile(response.data));
+    dispatch(actions.setUserProfile(response.data));
   };
 
 export const getUserStatus =
@@ -124,7 +98,7 @@ export const getUserStatus =
   async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
     const response = await profileAPI.getStatus(userId);
 
-    dispatch(setUserStatus(response.data));
+    dispatch(actions.setStatus(response.data));
   };
 
 export const updateUserStatus =
@@ -133,18 +107,35 @@ export const updateUserStatus =
     const response = await profileAPI.updateStatus(status);
 
     if (response.data.resultCode === 0) {
-      dispatch(setUserStatus(status));
+      dispatch(actions.setStatus(status));
     }
   };
 
 export const savePhoto =
-  (file: any): ThunkType =>
+  (file: File): ThunkType =>
   async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
     const response = await profileAPI.savePhoto(file);
 
     if (response.data.resultCode === 0) {
-      dispatch(savePhotoSuccess(response.data.data.photos));
+      dispatch(actions.savePhotoSuccess(response.data.data.photos));
     }
   };
- 
+export const saveProfile =
+  (profile: ProfileType): ThunkType =>
+  async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
+  
+    const userId = getState().auth.userId;
+    const response = await profileAPI.saveProfile(profile);
+
+    if (response.data.resultCode === 0) {
+      if (userId != null) {
+        //@ts-ignore
+        dispatch(getUserProfile(userId));
+      }  else {
+         //@ts-ignore
+        dispatch(stopSubmit("edit-profile", {_error: data.messages[0] }))
+      }
+    }
+  };
+
 export default profileReducer;

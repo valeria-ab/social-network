@@ -3,9 +3,7 @@ import { connect } from "react-redux";
 
 import {
   follow,
-  requestUsers,
-  setCurrentPage,
-  unfollow,
+  unfollow, requestUsers
 } from "../../redux/users-reducer";
 import { AppStateType } from "../../redux/redux-store";
 import Users from "./Users";
@@ -105,6 +103,6 @@ export default connect(mapStateToProps, {
 })(withRedirect);*/
 
 export default compose<React.ComponentType>(
-  connect(mapStateToProps, { setCurrentPage, requestUsers, follow, unfollow })
+  connect(mapStateToProps, {  requestUsers, follow, unfollow })
   //withAuthRedirect
 )(UsersContainer);

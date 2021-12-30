@@ -8,7 +8,7 @@ export type ProfileContactsType = {
   github: string;
   mainLink: string;
 };
-export type ProfileResponseType = {
+export type ProfileType = {
   aboutMe: string;
   contacts: ProfileContactsType;
   lookingForAJob: true;
@@ -16,8 +16,8 @@ export type ProfileResponseType = {
   fullName: string;
   userId: number;
   photos: ProfilePhotosType;
-  resultCode: number;
 };
+
 export type PostType = {
   id: string;
   postMessage: string;
@@ -25,7 +25,7 @@ export type PostType = {
 };
 export type ProfilePhotosType = {
   small: string | null;
-  large: string;
+  large: string | null;
 };
 
 export type UserType = {

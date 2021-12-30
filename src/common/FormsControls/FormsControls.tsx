@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Field } from "redux-form";
+import { Field, WrappedFieldMetaProps, WrappedFieldProps } from "redux-form";
+import { FieldValidatorType } from "../../utils/validators/validators";
 import s from "./FormsControls.module.css";
 
-// @ts-ignore
-export const FormControl = ({ input, meta: {touched, error}, children }) => {
+type FormControlPropsType = {
+  meta: WrappedFieldMetaProps
+}
+export const FormControl: React.FC<FormControlPropsType> = ({ meta: {touched, error}, children }) => {
   const hasError = touched && error;
 
   return (
@@ -15,9 +18,9 @@ export const FormControl = ({ input, meta: {touched, error}, children }) => {
 };
 
 //rest-оператор; пропсы будут содержать всё кроме инпута и меты
-// @ts-ignore
-export const Textarea = (props) => {
-  const { input, meta, child, ...restProps } = props;
+
+export const Textarea:  React.FC<WrappedFieldProps> = (props) => {
+  const { input, meta,  ...restProps } = props;
 
   return (
     <FormControl {...props}>
@@ -26,9 +29,9 @@ export const Textarea = (props) => {
   );
 };
 
-// @ts-ignore
-export const Input = (props) => {
-  const { input, meta, child, ...restProps } = props;
+
+export const Input: React.FC<WrappedFieldProps> = (props) => {
+  const { input, meta,  ...restProps } = props;
 
   return (
     <FormControl {...props}>
@@ -37,21 +40,18 @@ export const Input = (props) => {
   );
 };
 
-export const createField = (
-  placeholder: string | null,
-  name: string,
-  validators: any[],
-  component: any,
-  props: any  = {},
-  text?: string
-) => (
-  <div>
-    <Field
-      placeholder={placeholder}
-      name={name}
-      validate={validators}
-      component={component}
-      {...props}
-    /><span>{text}</span>
-  </div>
-);
+export function createField<FormKeysType extends string>(placeholder: string | undefined,
+  name: FormKeysType,
+  validators: Array<FieldValidatorType>,
+  component: React.FC<WrappedFieldProps>,
+  props = {}, text = "") {
+return <div>
+<Field placeholder={placeholder} name={name}
+validate={validators}
+component={component}
+{...props}
+/> {text}
+</div>
+}
+
+export type GetStringKeys<T> = Extract<keyof T, string>

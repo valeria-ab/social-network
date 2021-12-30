@@ -5,20 +5,21 @@ import {
   getUserProfile,
   getUserStatus,
   updateUserStatus,
-  savePhoto
+  savePhoto,
+  saveProfile
 } from "../../redux/profile-reducer";
 import { AppStateType } from "../../redux/redux-store";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
-import { ProfileResponseType } from "../../types/types";
+import { ProfileType } from "../../types/types";
 
 type PathParamsType = {
   userId: number | null;
 };
 
 type MapStateToPropsType = {
-  profile: null | ProfileResponseType;
+  profile: null | ProfileType;
   status: string;
   authorizedUserId: number | null;
   isAuth: boolean;
@@ -28,7 +29,8 @@ type MapDispatchToPropsType = {
   getUserProfile: (userId: number | null) => void;
   getUserStatus: (userId: number | null) => void;
   updateUserStatus: (status: string) => void;
-  savePhoto: Function
+  savePhoto: (file: File) => void
+  saveProfile: (profile: ProfileType) => Promise<any>
 };
 
 type ProfileContainerPropsType = MapStateToPropsType & MapDispatchToPropsType;
@@ -70,6 +72,7 @@ class ProfileContainer extends React.Component<PropsType> {
         status={this.props.status}
         updateStatus={this.props.updateUserStatus}
         savePhoto={this.props.savePhoto}
+        saveProfile={this.props.saveProfile}
       />
     );
   }
@@ -90,7 +93,7 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
 
 //вызовы идут снизу вверх - ProfileContainer оборачивается withAuthRedirect, то что она вернёт вызывается withRouter и т.д.
 export default compose<React.ComponentType>(
-  connect(mapStateToProps, { getUserProfile, getUserStatus, updateUserStatus, savePhoto }),
+  connect(mapStateToProps, { getUserProfile, getUserStatus, updateUserStatus, savePhoto, saveProfile }),
   withRouter,
   withAuthRedirect
 )(ProfileContainer);
