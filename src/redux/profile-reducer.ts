@@ -123,7 +123,6 @@ export const savePhoto =
 export const saveProfile =
   (profile: ProfileType): ThunkType =>
   async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
-  
     const userId = getState().auth.userId;
     const response = await profileAPI.saveProfile(profile);
 
@@ -131,9 +130,13 @@ export const saveProfile =
       if (userId != null) {
         //@ts-ignore
         dispatch(getUserProfile(userId));
-      }  else {
-         //@ts-ignore
-        dispatch(stopSubmit("edit-profile", {_error: data.messages[0] }))
+      } else {
+       
+        dispatch(
+           //@ts-ignore
+          stopSubmit("edit-profile", { _error: response.data.messages[0] })
+        );
+        return Promise.reject(response.data.messages[0]);
       }
     }
   };
