@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { AppStateType, InferActionsTypes } from "./redux-store";
-import { authAPI } from "../api/api";
+import { authAPI, securityAPI } from "../api/api";
 import { AxiosResponse } from "axios";
 import { stopSubmit } from "redux-form";
 
@@ -9,6 +9,7 @@ const initialState = {
   email: null as string | null,
   login: null as string | null,
   isAuth: false,
+  captchaUrl: null, //if null, than captcha is not required
 };
 
 export const actions = {
@@ -22,16 +23,21 @@ export const actions = {
       type: "SET_USER_DATA",
       payload: { userId, email, login, isAuth },
     } as const),
+  getCaptchaUrlSuccess: (captchaUrl: string) =>
+    ({
+      type: "GET_CAPTCHA_URL_SUCCESS",
+      payload: { captchaUrl },
+    } as const),
 };
 
 const authReducer = (state = initialState, action: any): initialAuthState => {
   switch (action.type) {
+    case "GET_CAPTCHA_URL_SUCCESS":
     case "SET_USER_DATA":
       return {
         ...state,
         ...action.payload,
       };
-
     default:
       return state;
   }
@@ -60,14 +66,18 @@ export const getAuthUserData =
   };
 
 export const login =
-  (email: string, password: string, rememberMe: boolean) =>
+  (email: string, password: string, rememberMe: boolean, captcha: string) =>
   async (dispatch: Dispatch<ActionsType>, getState: () => AppStateType) => {
-    const response = await authAPI.login(email, password, rememberMe);
+    const response = await authAPI.login(email, password, rememberMe, captcha);
 
     if (response.data.resultCode === 0) {
       // @ts-ignore
       dispatch(getAuthUserData());
     } else {
+      if (response.data.resultCode === 10) {
+        // @ts-ignore
+        dispatch(getCaptchaUrl());
+      }
       let message =
         response.data.messages.length > 0
           ? response.data.messages[0]
@@ -76,6 +86,16 @@ export const login =
       //@ts-ignore
       dispatch(action);
     }
+  };
+
+export const getCaptchaUrl =
+  () =>
+  async (dispatch: Dispatch<ActionsType>, getState: () => AppStateType) => {
+    const response = await securityAPI.getCaptchaUrl();
+    const captchaUrl = response.data.url;
+
+    //@ts-ignore
+    dispatch(getCaptchaUrlSuccess(captchaUrl));
   };
 
 export const logout =

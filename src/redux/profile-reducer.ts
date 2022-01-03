@@ -133,7 +133,7 @@ export const saveProfile =
       } else {
        
         dispatch(
-           //@ts-ignore
+           //@ts-ignore 
           stopSubmit("edit-profile", { _error: response.data.messages[0] })
         );
         return Promise.reject(response.data.messages[0]);
