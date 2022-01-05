@@ -104,11 +104,13 @@ export const getUserStatus =
 export const updateUserStatus =
   (status: string): ThunkType =>
   async (dispatch: Dispatch<ActionTypes>, getState: () => AppStateType) => {
-    const response = await profileAPI.updateStatus(status);
+    try {
+      const response = await profileAPI.updateStatus(status);
 
-    if (response.data.resultCode === 0) {
-      dispatch(actions.setStatus(status));
-    }
+      if (response.data.resultCode === 0) {
+        dispatch(actions.setStatus(status));
+      }
+    } catch (error) {}
   };
 
 export const savePhoto =
@@ -131,9 +133,8 @@ export const saveProfile =
         //@ts-ignore
         dispatch(getUserProfile(userId));
       } else {
-       
         dispatch(
-           //@ts-ignore 
+          //@ts-ignore
           stopSubmit("edit-profile", { _error: response.data.messages[0] })
         );
         return Promise.reject(response.data.messages[0]);

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Route, withRouter } from "react-router-dom";
+import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import "./App.css";
 import Preloader from "./common/Preloader/Preloader";
@@ -31,8 +31,20 @@ type MapDispatchToPropsType = {
 type AppComponentPropsType = MapStateToPropsType & MapDispatchToPropsType;
 
 class App extends React.Component<AppComponentPropsType> {
+  catchAllUnhandledErrors = (reason: any, promise: any) => {
+    //вместо алерта сделать в апп-редьюсере globalError добавить в стейт и в редьюсер
+    alert("some error occured");
+  };
   componentDidMount() {
     this.props.initializeApp();
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener(
+      "unhandledrejection",
+      this.catchAllUnhandledErrors
+    );
   }
 
   render() {
@@ -44,22 +56,20 @@ class App extends React.Component<AppComponentPropsType> {
         <HeaderContainer />
         <Navbar />
         <div className="app-wrapper-content">
-          <Route
-            path={"/profile/:userId?"}
-            render={withSuspense(ProfileContainer)}
-          />
-          <Route
-            path={"/dialogs"}
-            render={ withSuspense(DialogsContainer)}
-          />
-          <Route
-            path={"/users"}
-            render={ withSuspense(UsersContainer) }
-          />
-          <Route path={"/login"} render={() => <Login />} />
-          {/*<Route path ={'/news'} component={News}/>
+          <Switch>
+            <Route path={"/"} render={() => <Redirect to={"/profile"} />} />
+            <Route
+              path={"/profile/:userId?"}
+              render={withSuspense(ProfileContainer)}
+            />
+            <Route path={"/dialogs"} render={withSuspense(DialogsContainer)} />
+            <Route path={"/users"} render={withSuspense(UsersContainer)} />
+            <Route path={"/login"} render={() => <Login />} />
+            <Route path={"*"} render={() => <div>404 NOT FOUND</div>} />
+            {/*<Route path ={'/news'} component={News}/>
                     <Route path ={'/music'} component={Music}/>
                     <Route path ={'/settings'} component={Settings}/>*/}
+          </Switch>
         </div>
       </div>
     );
