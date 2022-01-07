@@ -1,10 +1,8 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import { UserType } from "../../types/types";
 import Paginator from "../../common/Paginator/Paginator";
-import styles from "./Users.module.css";
 import User from "./User";
-import { unfollow } from "../../redux/users-reducer";
+
 
 type UsersPropsType = {
   totalUsersCount: number;
@@ -34,7 +32,6 @@ const Users = ({
         pageSize={pageSize}
         currentPage={currentPage}
         onPageChanged={onPageChanged}
-        portionSize={10}
       />
       <div>
         {users.map((u) => (

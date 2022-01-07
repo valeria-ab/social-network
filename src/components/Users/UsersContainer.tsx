@@ -1,10 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import {
-  follow,
-  unfollow, requestUsers
-} from "../../redux/users-reducer";
+import { follow, unfollow, requestUsers } from "../../redux/users-reducer";
 import { AppStateType } from "../../redux/redux-store";
 import Users from "./Users";
 import Preloader from "../../common/Preloader/Preloader";
@@ -30,7 +27,6 @@ type MapStateToPropsType = {
 type MapDispatchToPropsType = {
   follow: (userID: number) => void;
   unfollow: (userID: number) => void;
-  setCurrentPage: (pageNumber: number) => void;
   requestUsers: (currentPage: number, pageSize: number) => void;
 };
 export type UsersContainerPropsType = MapStateToPropsType &
@@ -70,17 +66,6 @@ class UsersContainer extends React.Component<UsersContainerPropsType> {
   }
 }
 
-/*const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
-    return {
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        followingInProgress: state.usersPage.followingInProgress
-    }
-}*/
-
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
   return {
     users: getUsers(state),
@@ -103,6 +88,10 @@ export default connect(mapStateToProps, {
 })(withRedirect);*/
 
 export default compose<React.ComponentType>(
-  connect(mapStateToProps, {  requestUsers, follow, unfollow })
+  // {} - own props компоненты
+  connect<MapStateToPropsType, MapDispatchToPropsType, {}, AppStateType>(
+    mapStateToProps,
+    { requestUsers, follow, unfollow }
+  )
   //withAuthRedirect
 )(UsersContainer);

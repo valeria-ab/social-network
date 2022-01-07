@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import styles from "./Paginator.module.css";
-//import cn from "classnames";
+import cn from "classnames";
 
 type PaginatorPropsType = {
   totalItemsCount: number;
   pageSize: number;
   currentPage: number;
   onPageChanged: (pageNumber: number) => void;
-  portionSize: number;
+  portionSize?: number;
 };
 
 const Paginator = ({
