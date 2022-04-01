@@ -1,45 +1,37 @@
-import { getAuthUserData } from "./auth-reducer";
-import { Dispatch } from "redux";
-import { AppStateType } from "./redux-store";
-import { authAPI } from "../api/api";
-import { AxiosResponse } from "axios";
-import { stopSubmit } from "redux-form";
+import {getAuthUserData} from "./auth-reducer"
+import {InferActionsTypes} from './redux-store';
 
-const INITIALIZED_SUCCSESS = "INITIALIZED_SUCCSESS";
-
-export type InitialAppStateType = typeof initialState;
-const initialState = {
-  initialized: false,
+let initialState = {
+    initialized: false
 };
 
-export const appReducer = (
-  state = initialState,
-  action: any
-): InitialAppStateType => {
-  switch (action.type) {
-    case INITIALIZED_SUCCSESS:
-      return {
-        ...state,
-        initialized: true,
-      };
+export type InitialStateType = typeof initialState
+type ActionsType = InferActionsTypes<typeof actions>
 
-    default:
-      return state;
-  }
-};
+const appReducer = (state = initialState, action: ActionsType): InitialStateType => {
+    switch (action.type) {
+        case 'SN/APP/INITIALIZED_SUCCESS':
+            return {
+                ...state,
+                initialized: true
+            }
+        default:
+            return state;
+    }
+}
 
-export type InitializedSuccessActionType = {
-  type: typeof INITIALIZED_SUCCSESS;
-};
-export const initializedSuccess = (): InitializedSuccessActionType => ({
-  type: INITIALIZED_SUCCSESS,
-});
+export const actions = {
+    initializedSuccess: () => ({type: 'SN/APP/INITIALIZED_SUCCESS'} as const)
+}
 
-export const initializeApp =
-  () => (dispatch: Dispatch<any>, getState: () => AppStateType) => {
-    const promise = dispatch(getAuthUserData());
+export const initializeApp = () => (dispatch: any) => {
+    let promise = dispatch(getAuthUserData());
 
-    Promise.all([promise]).then(() => {
-      dispatch(initializedSuccess());
-    });
-  };
+    Promise.all([promise])
+        .then(() => {
+            dispatch(actions.initializedSuccess());
+        });
+}
+
+
+export default appReducer;

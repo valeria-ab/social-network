@@ -1,12 +1,11 @@
-.picture {
-  height: 400px;
-  text-align: center;
+.descriptionBlock {
+    padding: 10px;
 }
-.post img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+
+.mainPhoto {
+    max-width: 200px;
 }
+
 .contact {
-  padding-left: 20px;
+    padding-left: 10px;
 }

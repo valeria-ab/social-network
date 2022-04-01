@@ -1,45 +1,61 @@
-import profileReducer, {
-  AddPostActionCreator,
-  DeletePostActionCreator,
-} from "./profile-reducer";
+import profileReducer, {actions} from './profile-reducer';
+import React from 'react';
+import {ProfileType} from '../types/types';
 
-it("new post should be added", () => {
-  // 1. test data
-  const action = AddPostActionCreator("New post");
-  const startState = {
-    profile: null,
-    postsData: [
-      { id: "1", postMessage: "Hi! It's my first post", likesCount: 3 },
-      { id: "2", postMessage: "Yo!", likesCount: 12 },
+let state = {
+    posts: [
+        {id: 1, message: 'Hi, how are you?', likesCount: 12},
+        {id: 2, message: 'It\'s my first post', likesCount: 11},
+        {id: 3, message: 'Blabla', likesCount: 11},
+        {id: 4, message: 'Dada', likesCount: 11}
     ],
-    isAuth: false,
-    status: "",
-  };
+    profile: null,
+    status: '',
+};
 
-  // 2. action data
-  const newState = profileReducer(startState, action);
+it('length of posts should be incremented', () => {
+    // 1. test data
+    let action = actions.addPostActionCreator("it-kamasutra.com");
 
-  // 3. expectation
-  expect(newState.postsData.length).toBe(3);
-  expect(newState.postsData[2].postMessage).toBe("New post");
+    // 2. action
+    let newState = profileReducer(state, action);
+
+    // 3. expectation
+    expect(newState.posts.length).toBe(5);
+
 });
 
-it("after deleting length of messages should be decremented", () => {
-  // 1. test data
-  const action = DeletePostActionCreator("3");
-  const startState = {
-    profile: null,
-    postsData: [
-      { id: "1", postMessage: "Hi! It's my first post", likesCount: 3 },
-      { id: "2", postMessage: "Yo!", likesCount: 12 },
-    ],
-    isAuth: false,
-    status: "",
-  };
+it('message of new post should be correct', () => {
+    // 1. test data
+    let action = actions.addPostActionCreator("it-kamasutra.com");
 
-  // 2. action data
-  const newState = profileReducer(startState, action);
+    // 2. action
+    let newState = profileReducer(state, action);
 
-  // 3. expectation
-  expect(newState.postsData.length).toBe(2);
+    // 3. expectation
+    expect(newState.posts[4].message).toBe("it-kamasutra.com");
 });
+
+it('after deleting length of messages should be decrement', () => {
+    // 1. test data
+    let action = actions.deletePost(1);
+
+    // 2. action
+    let newState = profileReducer(state, action);
+
+    // 3. expectation
+    expect(newState.posts.length).toBe(3);
+});
+
+it(`after deleting length shouldn't be decrement if id is incorrect`, () => {
+    // 1. test data
+    let action = actions.deletePost(1000);
+
+    // 2. action
+    let newState = profileReducer(state, action);
+
+    // 3. expectation
+    expect(newState.posts.length).toBe(4);
+});
+
+

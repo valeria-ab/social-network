@@ -1,27 +1,25 @@
 import React from 'react';
-import styles from '../Header/Header.module.css';
-import {NavLink} from 'react-router-dom';
+import s from './Header.module.css';
+import {NavLink} from "react-router-dom";
 
-type HeaderPropsType = {
+export type MapPropsType = {
     isAuth: boolean
     login: string | null
+}
+export type DispatchPropsType = {
     logout: () => void
 }
 
-function Header(props: HeaderPropsType) {
-    return (
-       <header className={styles.header}>
-           <img className={styles.logo} src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Logo_TV_2015.svg/1164px-Logo_TV_2015.svg.png"
-                 alt="logj"/>
+const Header: React.FC<MapPropsType & DispatchPropsType> = (props) => {
+    return <header className={s.header}>
+        <img src='https://www.freelogodesign.org/Content/img/logo-ex-7.png' />
 
-                 <div className={styles.loginBlock}>
-                     {
-                         props.isAuth
-                                 ? <div>{props.login} - <button onClick={props.logout}>log out</button></div>
-                     :<NavLink to={"/login"}>Login</NavLink>
-                     }
-                 </div>
-       </header>
-    )
+        <div className={s.loginBlock}>
+            { props.isAuth
+                ? <div>{props.login} - <button onClick={props.logout}>Log out</button> </div>
+                : <NavLink to={'/login'}>Login</NavLink> }
+        </div>
+    </header>
 }
+
 export default Header;
