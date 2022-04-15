@@ -58,7 +58,7 @@ const Message: React.FC<{ message: ChatMessageType }> = ({message}) => {
 
 const AddMessageForm: React.FC = () => {
     const [message, setMessage] = useState('')
-    const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending')
+    const status = useSelector<AppStateType, 'pending' | 'ready'>(store => store.chat.status)
     const dispatch = useDispatch()
 
 
@@ -75,7 +75,7 @@ const AddMessageForm: React.FC = () => {
             /></div>
         <div>
             <button onClick={sendMessageHandler}
-                    // disabled={wsChannel === null || readyStatus !== 'ready'}
+                    disabled={status !== 'ready'}
             >send
             </button>
         </div>

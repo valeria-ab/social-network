@@ -2,11 +2,13 @@ import {ResultCodesEnum} from '../api/api';
 import {authAPI} from '../api/auth-api';
 import {BaseThunkType, InferActionsTypes} from './redux-store';
 import {FormAction} from 'redux-form/lib/actions';
-import {chatAPI, ChatMessageType} from '../api/chat-api';
+import {chatAPI, ChatMessageType, StatusType} from '../api/chat-api';
 import {Dispatch} from 'redux';
+
 
 let initialState = {
     messages: [] as ChatMessageType[],
+    status: 'pending' as StatusType
 };
 
 const chatReducer = (state = initialState, action: ActionsType): InitialStateType => {
@@ -16,6 +18,11 @@ const chatReducer = (state = initialState, action: ActionsType): InitialStateTyp
                 ...state,
                 messages: [...state.messages, ...action.payload]
             }
+        case 'SN/chat/STATUS_CHANGED':
+            return {
+                ...state,
+                status: action.payload.status
+            }
         default:
             return state;
     }
@@ -24,6 +31,9 @@ const chatReducer = (state = initialState, action: ActionsType): InitialStateTyp
 export const actions = {
     messagesReceived: (messages: ChatMessageType[]) => ({
         type: 'SN/chat/MESSAGES_RECEIVED', payload: messages
+    } as const),
+    statusChanged: (status: StatusType) => ({
+        type: 'SN/chat/STATUS_CHANGED', payload: {status}
     } as const),
 }
 
@@ -39,12 +49,12 @@ const newMessageHandlerCreator = (dispatch: Dispatch) => {
 }
 
 export const startMessagesListening = (): ThunkType => async (dispatch) => {
-  chatAPI.start()
-    chatAPI.subscribe(newMessageHandlerCreator(dispatch))
+    chatAPI.start()
+    chatAPI.subscribe('messages-received', newMessageHandlerCreator(dispatch))
 }
 
 export const stopMessagesListening = (): ThunkType => async (dispatch) => {
-    chatAPI.unsubscribe(newMessageHandlerCreator(dispatch))
+    chatAPI.unsubscribe('messages-received', newMessageHandlerCreator(dispatch))
     chatAPI.stop()
 }
 
