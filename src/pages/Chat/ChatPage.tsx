@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ChatMessageType} from '../../api/chat-api';
+import {ChatMessageType, StatusType} from '../../api/chat-api';
 import {useDispatch, useSelector} from 'react-redux';
 import {sendMessage, startMessagesListening, stopMessagesListening} from '../../redux/chat-reducer';
 import {AppStateType} from '../../redux/redux-store';
@@ -18,7 +18,7 @@ const ChatPage = () => {
 
 const Chat = () => {
     const dispatch = useDispatch()
-
+    const status = useSelector<AppStateType, StatusType>(store => store.chat.status)
 
     useEffect(() => {
         dispatch(startMessagesListening())
@@ -30,8 +30,12 @@ const Chat = () => {
 
 
     return <div>
-        <Messages/>
-        <AddMessageForm/>
+        {status === 'error' && <div>Some error occurred. Please refresh the page</div>}
+        <>
+            <Messages/>
+            <AddMessageForm/>
+        </>
+
     </div>
 }
 const Messages: React.FC = () => {
@@ -58,7 +62,7 @@ const Message: React.FC<{ message: ChatMessageType }> = ({message}) => {
 
 const AddMessageForm: React.FC = () => {
     const [message, setMessage] = useState('')
-    const status = useSelector<AppStateType, 'pending' | 'ready'>(store => store.chat.status)
+    const status = useSelector<AppStateType, StatusType>(store => store.chat.status)
     const dispatch = useDispatch()
 
 
