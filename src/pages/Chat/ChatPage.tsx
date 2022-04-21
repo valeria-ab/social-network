@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {ChatMessageType, StatusType} from '../../api/chat-api';
 import {useDispatch, useSelector} from 'react-redux';
 import {sendMessage, startMessagesListening, stopMessagesListening} from '../../redux/chat-reducer';
@@ -39,13 +39,28 @@ const Chat = () => {
     </div>
 }
 const Messages: React.FC = () => {
-
+    const messagesAnchorRef = useRef<HTMLDivElement>(null);
     const messages = useSelector<AppStateType, ChatMessageType[]>((state) => state.chat.messages)
+    const [isAutoScroll, setIsAutoScroll] = useState(true)
 
+    const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+        const element = e.currentTarget
+        if (Math.abs((element.scrollHeight - element.scrollTop) - element.clientHeight) < 300) {
+            !isAutoScroll && setIsAutoScroll(true)
+        } else {
+            isAutoScroll && setIsAutoScroll(false)
+        }
+    }
 
-    return <div style={{height: '400px', overflowY: 'auto'}}>
+    useEffect(() => {
+        if (isAutoScroll) {
+            messagesAnchorRef.current?.scrollIntoView({behavior: 'smooth'})
+        }
+    }, [messages])
+
+    return <div style={{height: '400px', overflowY: 'auto'}} onScroll={scrollHandler}>
         {messages.map((message, index) => <Message key={index} message={message}/>)}
-
+        <div ref={messagesAnchorRef}></div>
     </div>
 }
 
