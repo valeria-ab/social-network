@@ -1,9 +1,10 @@
 import {BaseThunkType, InferActionsTypes} from './redux-store';
 import {FormAction} from 'redux-form/lib/actions';
-import {chatAPI, ChatMessageType, StatusType} from '../api/chat-api';
+import {chatAPI, ChatMessageAPIType, StatusType} from '../api/chat-api';
 import {Dispatch} from 'redux';
+import {v1} from 'uuid';
 
-
+export type ChatMessageType = ChatMessageAPIType & {id: string}
 let initialState = {
     messages: [] as ChatMessageType[],
     status: 'pending' as StatusType
@@ -14,7 +15,8 @@ const chatReducer = (state = initialState, action: ActionsType): InitialStateTyp
         case 'SN/chat/MESSAGES_RECEIVED':
             return {
                 ...state,
-                messages: [...state.messages, ...action.payload]
+                messages: [...state.messages, ...action.payload.messages.map(m => ({...m, id: v1() }))]
+                    .filter((m, index, array) => index >= array.length - 100)
             }
         case 'SN/chat/STATUS_CHANGED':
             return {
@@ -27,15 +29,15 @@ const chatReducer = (state = initialState, action: ActionsType): InitialStateTyp
 }
 
 export const actions = {
-    messagesReceived: (messages: ChatMessageType[]) => ({
-        type: 'SN/chat/MESSAGES_RECEIVED', payload: messages
+    messagesReceived: (messages: ChatMessageAPIType[]) => ({
+        type: 'SN/chat/MESSAGES_RECEIVED', payload: {messages}
     } as const),
     statusChanged: (status: StatusType) => ({
         type: 'SN/chat/STATUS_CHANGED', payload: {status}
     } as const),
 }
 
-let _newMessageHandler: ((messages: ChatMessageType[]) => void) | null = null
+let _newMessageHandler: ((messages: ChatMessageAPIType[]) => void) | null = null
 
 const newMessageHandlerCreator = (dispatch: Dispatch) => {
     if (_newMessageHandler === null) {

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ChatMessageType, StatusType} from '../../api/chat-api';
+import {ChatMessageAPIType, StatusType} from '../../api/chat-api';
 import {useDispatch, useSelector} from 'react-redux';
-import {sendMessage, startMessagesListening, stopMessagesListening} from '../../redux/chat-reducer';
+import {ChatMessageType, sendMessage, startMessagesListening, stopMessagesListening} from '../../redux/chat-reducer';
 import {AppStateType} from '../../redux/redux-store';
 
 
@@ -59,12 +59,12 @@ const Messages: React.FC = () => {
     }, [messages])
 
     return <div style={{height: '400px', overflowY: 'auto'}} onScroll={scrollHandler}>
-        {messages.map((message, index) => <Message key={index} message={message}/>)}
+        {messages.map((message, index) => <Message key={message.id} message={message}/>)}
         <div ref={messagesAnchorRef}></div>
     </div>
 }
 
-const Message: React.FC<{ message: ChatMessageType }> = ({message}) => {
+const Message: React.FC<{ message: ChatMessageType }> = React.memo(({message}) => {
 
     return <div>
         <img src={message.photo} style={{width: '30px'}}/>
@@ -73,7 +73,7 @@ const Message: React.FC<{ message: ChatMessageType }> = ({message}) => {
         {message.message}
         <hr/>
     </div>
-}
+})
 
 const AddMessageForm: React.FC = () => {
     const [message, setMessage] = useState('')

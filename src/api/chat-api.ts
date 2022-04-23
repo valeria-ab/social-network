@@ -1,4 +1,4 @@
-type MessagesReceivedSubscriberType = (messages: ChatMessageType[]) => void;
+type MessagesReceivedSubscriberType = (messages: ChatMessageAPIType[]) => void;
 export type StatusType = 'pending' | 'ready' | 'error'
 type StatusChangedSubscriberType = (status: StatusType) => void
 
@@ -63,7 +63,7 @@ export const chatAPI = {
         subscribers['messages-received'] = []
         subscribers['status-changed'] = []
         cleanUp()
-      ws?.close()
+        ws?.close()
     },
     subscribe(eventName: EventNamesType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType) {
         // @ts-ignore
@@ -82,10 +82,9 @@ export const chatAPI = {
     }
 }
 
-export type ChatMessageType = {
+export type ChatMessageAPIType = {
     message: string
     photo: string
     userId: number
     userName: string
-
 }
