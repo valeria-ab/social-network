@@ -1,15 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ChatMessageAPIType, StatusType} from '../../api/chat-api';
+import {StatusType} from '../../api/chat-api';
 import {useDispatch, useSelector} from 'react-redux';
 import {ChatMessageType, sendMessage, startMessagesListening, stopMessagesListening} from '../../redux/chat-reducer';
 import {AppStateType} from '../../redux/redux-store';
 
 
 const ChatPage = () => {
-
-    // useEffect( () => {
-    //     createChannel()
-    // }, [])
 
     return <div>
         <Chat/>
@@ -26,7 +22,7 @@ const Chat = () => {
         return () => {
             dispatch(stopMessagesListening())
         }
-    }, [])
+    }, [dispatch])
 
 
     return <div>
@@ -60,7 +56,7 @@ const Messages: React.FC = () => {
 
     return <div style={{height: '400px', overflowY: 'auto'}} onScroll={scrollHandler}>
         {messages.map((message, index) => <Message key={message.id} message={message}/>)}
-        <div ref={messagesAnchorRef}></div>
+        <div ref={messagesAnchorRef}/>
     </div>
 }
 
