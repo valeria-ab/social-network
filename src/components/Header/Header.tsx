@@ -7,14 +7,6 @@ import {AppStateType} from '../../redux/redux-store';
 import {logout} from '../../redux/auth-reducer';
 
 
-export type MapPropsType = {
-    isAuth: boolean
-    login: string | null
-}
-export type DispatchPropsType = {
-    logout: () => void
-}
-
 export const Header = () => {
 
     const {Header} = Layout;
